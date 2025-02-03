@@ -32,6 +32,7 @@ export const signup = async (req,res) =>{
 		});
         await newUser.save();
 
+		
 		generateTokenAndsetCookie(res,newUser._id);
        await sendverificationEmail(newUser.email, verificationToken);
 
@@ -56,7 +57,10 @@ export const login = async (req, res) => {
 		if (!isPasswordValid) {
 			return res.status(400).json({ success: false, message: "Invalid credentials" });
 		}
-
+	    if(!user.isVerified){
+			return res.status(400).json({success:false, message:"Email not verified"});
+		}
+		
 		generateTokenAndsetCookie(res, user._id);
 
 		user.lastLogin = new Date();
