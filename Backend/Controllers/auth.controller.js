@@ -43,7 +43,7 @@ export const signup = async (req,res) =>{
         res.status(500).json({message: "Something went wrong"});
     }
 
-}
+};
 
 export const login = async (req, res) => {
 
@@ -60,7 +60,7 @@ export const login = async (req, res) => {
 	    if(!user.isVerified){
 			return res.status(400).json({success:false, message:"Email not verified"});
 		}
-		
+
 		generateTokenAndsetCookie(res, user._id);
 
 		user.lastLogin = new Date();
@@ -79,7 +79,6 @@ export const login = async (req, res) => {
 		res.status(400).json({ success: false, message: error.message });
 	}
 };
-
 
 export const verifyEmail = async (req,res) =>{
 
@@ -114,13 +113,12 @@ export const verifyEmail = async (req,res) =>{
         console.log("Verify email")
         res.status(500).json({success:false,message:"Server error"})
     }
-}
-
+};
 
 export const logout = async (req,res)=>{
     res.clearCookie("token");
     res.status(200).json({success:true, message:"Logged Out successfully"});
-}
+};
 
 export const forgotPassword = async (req,res) =>{
 
@@ -147,7 +145,7 @@ export const forgotPassword = async (req,res) =>{
         console.log("Error in forgotPassword", error);
         res.status(400).json({success:false,message:error.message});
     }
-}
+};
 
 export const resetPassord = async (req,res) => {
 
@@ -179,7 +177,7 @@ export const resetPassord = async (req,res) => {
         console.log("Error in resetPassword", error);
         res.status(400).json({success:false,message:error.message});
     }
-}
+};
 
 export const checkAuth = async (req,res) =>{
 
@@ -195,4 +193,4 @@ export const checkAuth = async (req,res) =>{
         console.log("Error in checkAuth", error);
         res.status(400).json({success:false,message:error.message});
     }
-}
+};
