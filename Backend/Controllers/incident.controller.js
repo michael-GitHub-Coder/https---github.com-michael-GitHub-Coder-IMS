@@ -75,6 +75,11 @@ export const updateTicket = async (req,res) =>{
         if(!ticket){
             return res.status(404).json({message:"Ticket not found"});
         }
+
+        ticket.assignedTo = assignedTo;
+        await ticket.save();
+        res.status(200).json({message:"Ticket assigned",ticket});
+
     } catch (error) {
         console.log("assignticket error",error);
         res.status(500).json({message:error.message});
