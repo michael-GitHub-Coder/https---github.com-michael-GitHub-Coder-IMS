@@ -75,10 +75,6 @@ export const updateTicket = async (req,res) =>{
         if(!ticket){
             return res.status(404).json({message:"Ticket not found"});
         }
-        
-        
-        
-
     } catch (error) {
         console.log("assignticket error",error);
         res.status(500).json({message:error.message});
