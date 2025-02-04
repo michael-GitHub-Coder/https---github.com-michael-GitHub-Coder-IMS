@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const incidentSchema = new mongoose.Schema({
   title: { 
@@ -25,27 +25,27 @@ const incidentSchema = new mongoose.Schema({
   createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User", 
-    required: true 
+    required: false 
   },
   assignedTo: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User", 
-    required: true 
+    required: false 
   },
   supervisorId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User", 
-    required: true 
+    required: false 
   },
   region: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "Region", 
-    required: true 
+    required: false 
   },
   group: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "Group", 
-    required: true 
+    required: false 
   },
 }, { timestamps: true });
 
