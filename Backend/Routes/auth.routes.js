@@ -3,6 +3,7 @@ import { login,addMembers, signup, logout, verifyEmail, forgotPassword, resetPas
 import { verifyToken } from "../middleware/veifyToken.js";
 import { addTicket,updateTicket,updateTicketstatus,getAllTickets } from "../Controllers/incident.controller.js";
 import {addRegion,getAllRegions} from "../Controllers/region.controller.js";
+import {getAllGroups} from "../Controllers/group.controller.js";
 
 const router = express.Router();
 
@@ -33,6 +34,10 @@ router.get("/All-Tickets",getAllTickets);
 
 router.post("/Add-Region",verifyToken,addRegion);
 router.get("/All-Regions",verifyToken,getAllRegions);
+
+//Groups
+
+router.get("/All-Groups",verifyToken,getAllGroups);
 
 
 export default router;
