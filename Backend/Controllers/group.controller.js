@@ -2,14 +2,16 @@ import {Group} from '../Models/group.model.js';
 
 export const addGroup = async (req, res) =>{
     
-    const {name} = req.body;
-    if(!name){
+    const {name,regionId,supervisorId} = req.body;
+    if(!name || !regionId || !supervisorId){
         return res.status(400).json({message:"All fields are required"});
     }
 
     try {
         const group = new Group({
-            name
+            name,
+            regionId,
+            supervisorId
         });
         await group.save();
         res.status(201).json({message:"Group created successfully ",group});

@@ -3,7 +3,7 @@ import { login,addMembers, signup, logout, verifyEmail, forgotPassword, resetPas
 import { verifyToken } from "../middleware/veifyToken.js";
 import { addTicket,updateTicket,updateTicketstatus,getAllTickets } from "../Controllers/incident.controller.js";
 import {addRegion,getAllRegions} from "../Controllers/region.controller.js";
-import {getAllGroups} from "../Controllers/group.controller.js";
+import {addGroup, getAllGroups} from "../Controllers/group.controller.js";
 
 const router = express.Router();
 
@@ -37,6 +37,7 @@ router.get("/All-Regions",verifyToken,getAllRegions);
 
 //Groups
 
+router.post("/Add-Group",verifyToken,addGroup);
 router.get("/All-Groups",verifyToken,getAllGroups);
 
 
