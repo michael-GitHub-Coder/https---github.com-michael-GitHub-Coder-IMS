@@ -37,6 +37,7 @@ export const addRegion = async (req, res) =>{
 }
 
 export const getAllRegions = async (req,res) =>{
+
     try {
 
         if(!req.userId){
@@ -57,4 +58,5 @@ export const getAllRegions = async (req,res) =>{
         console.log("getAllRegions error", error);
         res.status(500).json({message:error.message});
     }
+    
 }
