@@ -57,9 +57,9 @@ export const login = async (req, res) => {
 		if (!isPasswordValid) {
 			return res.status(400).json({ success: false, message: "Invalid credentials" });
 		}
-	    if(!user.isVerified){
-			return res.status(400).json({success:false, message:"Email not verified"});
-		}
+	    // if(!user.isVerified){
+		// 	return res.status(400).json({success:false, message:"Email not verified"});
+		// }
 
 		generateTokenAndsetCookie(res, user._id);
 
@@ -194,3 +194,72 @@ export const checkAuth = async (req,res) =>{
         res.status(400).json({success:false,message:error.message});
     }
 };
+
+export const addMembers = async (req,res) =>{
+   
+    const {email,name,password,role} = req.body;
+
+    if(!email || !name || !password || !role){
+        return res.status(400).json({message:"All fields are required"});
+    }
+
+    try {
+
+        const admin = await User.findById(req.userId).select("-password");
+
+        if(!admin){
+            return res.status(400).json({message:"Permission Denied"});
+        } 
+        if(admin.role !== "Admin"){
+            return res.status(403).json({message:"Permission Denied", reqRole:admin.role});
+        }
+
+        const user = await User.findOne({email});
+        if(user){
+            return res.status(400).json({message:"User already exists"});
+        }
+
+        //const salt = await bcryptjs.genSalt(10);
+        const hashedPassword = await bcryptjs.hash(password,10);
+		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+
+        const newUser = new User({
+			email,
+			name,
+            role,
+			password:hashedPassword,
+			verificationToken,
+            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
+		});
+        await newUser.save();
+
+		
+		generateTokenAndsetCookie(res,newUser._id);
+       // await sendverificationEmail(newUser.email, verificationToken);
+
+        res.status(201).json({success:true, message:"User created successfully",User:newUser});
+
+    } catch (error) {
+        console.log("Something went wrong", error.message);
+        res.status(500).json({message: "Something went wrong"});
+    }
+
+}
+
+export const updateRole = async (req,res) =>{
+
+
+}
+
+export const getAllUsers = async (req,res) =>{
+    try {
+        // if(req.role !== "Admin"){
+        //     return res.status(403).json({message:"Permission Denied"});
+        // }
+        const users = await User.find({}).select("-password");
+        res.status(200).json({success:true,users});
+    } catch (error) {
+        console.log("Error in getAllUsers", error);
+        res.status(500).json({success:false,message:error.message});
+    }
+}

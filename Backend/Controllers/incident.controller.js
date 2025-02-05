@@ -1,4 +1,5 @@
 import { Incident } from "../Models/Incident.Model.js";
+import { User } from "../Models/User.model.js";
 
 export const addTicket = async (req, res) =>{
    
@@ -32,6 +33,7 @@ export const addTicket = async (req, res) =>{
 
 export const getTickets = async (req,res) =>{
 
+    
     try {
         let tickets;
         if(req.role === "Admin"){
@@ -59,8 +61,9 @@ export const getTickets = async (req,res) =>{
 
 export const updateTicket = async (req,res) =>{
 
-    const {incidentID} = req.prams;
+    const {incidentID} = req.params;
     const {assignedTo} = req.body;
+
     if(!assignedTo){
         return res.status(400).json({message:"All fields are required"});
     }
@@ -77,11 +80,76 @@ export const updateTicket = async (req,res) =>{
         }
 
         ticket.assignedTo = assignedTo;
+        ticket.supervisorId = req.userId;
+
         await ticket.save();
+
         res.status(200).json({message:"Ticket assigned",ticket});
 
     } catch (error) {
         console.log("assignticket error",error);
         res.status(500).json({message:error.message});
     }
+}
+
+export const updateTicketstatus = async (req,res) =>{
+
+    const {id} = req.params;
+    const {status} = req.body;
+
+    if(!status || !id){
+        return res.status(400).json({message:"All fields are required"});
+    }
+
+    try {
+        const user = await User.findById(req.userId).select("-password");
+        if(!user){
+            return res.status(400).json({message:"Permission Denied"});
+        }
+        const ticket = await Incident.findById(id);
+        if(!ticket){
+            return res.status(404).json({message:"Ticket not found"});
+        }
+
+        ticket.status = status;
+        // if(user.role === "Technician"){
+        //     ticket.assignedTo = req.userId;
+        // }
+        await ticket.save();
+        res.status(200).json({message:"Ticket status updated",ticket});
+    } catch (error) {
+        console.log("updateTicketstatus error",error);
+        res.status(500).json({message:error.message});
+    }
+}
+
+// export const sortByStatus = async (req,res) =>{
+
+//     try {
+//         const tickets = await Incident.find().sort({status:1});
+//         res.status(200).json({tickets});
+//     } catch (error) {
+//         console.log("sortByStatus error",error);
+//         res.status(500).json({message:error.message});
+//     }
+// }
+
+//  export const sortByPriority = async (req,res) =>{}
+
+export const getAllTickets = async (req,res) =>{
+    try {
+        const tickets = await Incident.find().populate("createdBy","name email")
+        .populate("assignedTo","name email")
+        .populate("supervisorId","name email")
+        .populate("region","name")
+        .populate("group","name");
+        res.status(200).json({tickets});
+    } catch (error) {
+        console.log("getAllTickets error",error);
+        res.status(500).json({message:error.message});
+    }
+}
+
+export const ticketassignedtoTechnician = async (req,res) =>{
+  
 }
