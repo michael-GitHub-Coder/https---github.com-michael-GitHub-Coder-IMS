@@ -2,7 +2,7 @@ import express  from "express";
 import { login,addMembers, signup, logout, verifyEmail, forgotPassword, resetPassord,checkAuth,getAllUsers} from "../Controllers/auth.controller.js";
 import { verifyToken } from "../middleware/veifyToken.js";
 import { addTicket,updateTicket,updateTicketstatus,getAllTickets } from "../Controllers/incident.controller.js";
-import {addRegion} from "../Controllers/region.controller.js";
+import {addRegion,getAllRegions} from "../Controllers/region.controller.js";
 
 const router = express.Router();
 
@@ -32,6 +32,7 @@ router.get("/All-Tickets",getAllTickets);
 //Regions
 
 router.post("/Add-Region",verifyToken,addRegion);
+router.get("/All-Regions",verifyToken,getAllRegions);
 
 
 export default router;
