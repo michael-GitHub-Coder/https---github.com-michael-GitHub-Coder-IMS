@@ -53,10 +53,12 @@ export const getAllRegions = async (req,res) =>{
         }
 
         const regions = await Region.find().populate("managerId","name email");
+        
         res.status(200).json({regions});
+
     } catch (error) {
         console.log("getAllRegions error", error);
         res.status(500).json({message:error.message});
     }
-    
+
 }
