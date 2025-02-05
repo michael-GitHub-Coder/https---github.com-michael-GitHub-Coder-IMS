@@ -20,9 +20,18 @@ export const addGroup = async (req, res) =>{
     }
 }
 
+export const getAllGroups = async (req,res) =>{
+    try {
+        const groups = await Group.find();
+        res.status(200).json({groups});
+    } catch (error) {
+        console.log("getAllGroups error", error);
+        res.status(500).json({message:error.message});
+    }
+}
 export const addToGroup = async (req, res) =>{
-    const {groupId, userId} = req.body;
-    if(!groupId || !userId){
+    const {regionId, supervisorId} = req.body;
+    if(!groupId || !supervisorId){
         return res.status(400).json({message:"All fields are required"});
     }
    
