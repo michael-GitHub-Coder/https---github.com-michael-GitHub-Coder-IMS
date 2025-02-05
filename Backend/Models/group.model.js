@@ -9,12 +9,12 @@ const groupSchema = new mongoose.Schema({
   regionId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "Region", 
-    required: true 
+    required: false 
   },
   supervisorId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User", 
-    required: true 
+    required: false 
   },
 });
 

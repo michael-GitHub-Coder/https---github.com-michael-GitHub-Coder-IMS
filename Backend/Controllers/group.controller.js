@@ -3,7 +3,7 @@ import {Group} from '../Models/group.model.js';
 export const addGroup = async (req, res) =>{
     
     const {name,regionId,supervisorId} = req.body;
-    if(!name || !regionId || !supervisorId){
+    if(!name){
         return res.status(400).json({message:"All fields are required"});
     }
 
