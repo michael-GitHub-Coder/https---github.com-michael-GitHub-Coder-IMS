@@ -7,27 +7,27 @@ import {addGroup, getAllGroups} from "../Controllers/group.controller.js";
 
 const router = express.Router();
 
-router.get("/check-auth", verifyToken,checkAuth);
 
+//users
+
+
+router.get("/check-auth", verifyToken,checkAuth);
 router.post("/sign-up", signup);
 router.post("/member",verifyToken, addMembers);
 router.post("/login",login);
-
 router.post("/logout",logout);
-
 router.post("/verify-email", verifyEmail);
 router.post("/forgot-password", forgotPassword);
-
 router.post("/reset-password/:token", resetPassord);
-
 router.get("/All-Users",getAllUsers);
+
+
 //tickets 
+
 router.post("/Add-Ticket",verifyToken,addTicket);
 router.get("/Ticket",verifyToken,addTicket); 
 router.get("/Assign/:incidentID",verifyToken,updateTicket); 
-
 router.put("/updateStatus/:id",verifyToken,updateTicketstatus); 
-
 router.get("/All-Tickets",getAllTickets);
 
 //Regions
