@@ -40,8 +40,6 @@ export const addToGroup = async (req, res) =>{
     const {regionId, supervisorId} = req.body;
     const {id} = req.params;
 
-    
-
     if(!regionId || !supervisorId){
         return res.status(400).json({message:"All fields are required"});
     }
@@ -65,7 +63,7 @@ export const addToGroup = async (req, res) =>{
         if(!region){
             return res.status(404).json({message:"Region not found"});
         }
-        
+
         const supervisor = await User.findById(supervisorId);
         if(!supervisor){
             return res.status(404).json({message:"Supervisor not found"});
