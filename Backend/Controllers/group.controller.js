@@ -1,5 +1,6 @@
 import {Group} from '../Models/group.model.js';
 import {User} from '../Models/User.model.js';
+import {Region} from '../Models/region.model.js';
 
 export const addGroup = async (req, res) =>{
     
@@ -60,6 +61,14 @@ export const addToGroup = async (req, res) =>{
             return res.status(404).json({message:"Group not found"});
         }
       
+        const region = await Region.findById(regionId);
+        if(!region){
+            return res.status(404).json({message:"Region not found"});
+        }
+        const supervisor = await User.findById(supervisorId);
+        if(!supervisor){
+            return res.status(404).json({message:"Supervisor not found"});
+        }
         group.name = group.name;
         group.regionId = regionId;
         group.supervisorId = supervisorId;
