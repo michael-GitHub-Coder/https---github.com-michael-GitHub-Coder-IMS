@@ -32,9 +32,16 @@ export const getAllGroups = async (req,res) =>{
     }
 }
 export const addToGroup = async (req, res) =>{
+    
     const {regionId, supervisorId} = req.body;
     if(!groupId || !supervisorId){
         return res.status(400).json({message:"All fields are required"});
+    }
+
+    try {
+        
+    } catch (error) {
+        
     }
    
 }
