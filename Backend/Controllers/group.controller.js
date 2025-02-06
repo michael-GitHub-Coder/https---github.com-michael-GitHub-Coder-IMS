@@ -65,11 +65,12 @@ export const addToGroup = async (req, res) =>{
         if(!region){
             return res.status(404).json({message:"Region not found"});
         }
+        
         const supervisor = await User.findById(supervisorId);
         if(!supervisor){
             return res.status(404).json({message:"Supervisor not found"});
         }
-        
+
         group.name = group.name;
         group.regionId = regionId;
         group.supervisorId = supervisorId;
