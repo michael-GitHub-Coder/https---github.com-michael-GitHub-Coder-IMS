@@ -69,6 +69,7 @@ export const addToGroup = async (req, res) =>{
         if(!supervisor){
             return res.status(404).json({message:"Supervisor not found"});
         }
+        
         group.name = group.name;
         group.regionId = regionId;
         group.supervisorId = supervisorId;
