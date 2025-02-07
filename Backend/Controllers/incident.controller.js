@@ -153,3 +153,22 @@ export const getAllTickets = async (req,res) =>{
 export const ticketassignedtoTechnician = async (req,res) =>{
   
 }
+
+//wagwan bosy
+export const getIncidentByStatus = async (req, res) => {
+    try {
+        const statusCounts = await Incident.aggregate([
+            { $group: { _id: "$status", count: { $sum: 1 } } }
+        ]);
+
+        const formattedCounts = {};
+        statusCounts.forEach(({ _id, count }) => {
+            formattedCounts[_id] = count;
+        });
+
+        res.status(200).json({ statusCounts: formattedCounts });
+    } catch (error) {
+        console.error("getIncidentByStatus error", error);
+        res.status(500).json({ message: error.message });
+    }
+};

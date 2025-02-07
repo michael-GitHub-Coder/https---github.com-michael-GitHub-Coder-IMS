@@ -1,7 +1,7 @@
 import express  from "express";
 import { login,addMembers, signup, logout, verifyEmail, forgotPassword, resetPassord,checkAuth,getAllUsers} from "../Controllers/auth.controller.js";
 import { verifyToken } from "../middleware/veifyToken.js";
-import { addTicket,updateTicket,updateTicketstatus,getAllTickets } from "../Controllers/incident.controller.js";
+import { addTicket,updateTicket,updateTicketstatus,getAllTickets ,getIncidentByStatus} from "../Controllers/incident.controller.js";
 import {addRegion,getAllRegions} from "../Controllers/region.controller.js";
 import {addGroup, getAllGroups,addToGroup} from "../Controllers/group.controller.js";
 
@@ -29,6 +29,8 @@ router.get("/Ticket",verifyToken,addTicket);
 router.get("/Assign/:incidentID",verifyToken,updateTicket); 
 router.put("/updateStatus/:id",verifyToken,updateTicketstatus); 
 router.get("/All-Tickets",getAllTickets);
+
+router.get("/Count-status",verifyToken,getIncidentByStatus);
 
 //Regions
 
