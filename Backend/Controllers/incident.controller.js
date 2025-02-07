@@ -10,7 +10,8 @@ export const addTicket = async (req, res) =>{
 
     try {
 
-        const user = await User.findById(req.userId).select("-password");
+        const user = await User.findById(req.userId);
+
         if(user.role === "Technician" || user.role === "Supervisor"){
             return res.status(403).json({message:"Permission Denied"});
         }
