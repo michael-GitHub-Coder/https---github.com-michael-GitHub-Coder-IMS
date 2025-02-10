@@ -1,10 +1,9 @@
+import Login from "./Components/Login"
 
 const App = () => {
   
   return (
-    <p className="bg-green-900">
-     
-    </p>
+    <div className="bg-gray-100"><Login /></div>
   )
 }
 
