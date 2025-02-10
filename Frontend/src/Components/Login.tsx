@@ -11,6 +11,11 @@ const Login = () => {
               <input type="text" placeholder="Enter the Password" className="font-bold px-2 py-3 rounded-md text-gray-500 bg-gray-300 w-96 mt-5"/>
               <p className="flex py-3 justify-end text-black font-bold">Forgot Password?</p>
               <button className="font-bold px-2 py-3 rounded-md bg-gray-300 w-96  text-gray-500 ">Sign in</button>
+              <div className="flex text-gray-500">
+                <p className="border-b-2 border-gray-500 w-[45%] mb-2"></p>
+                <p className="text-gray-400 mx-2 mt-2">OR</p>
+                <p className="border-b-2 border-gray-500 w-[45%] mb-2"></p>
+              </div>
           </div>
           <div className="bg-indigo-500 rounded-md px-2 py-1 w-96 opacity-80 ">
               rgr
