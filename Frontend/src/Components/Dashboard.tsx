@@ -36,7 +36,7 @@ const Dashboard = () => {
                 <Sidebar isOpen={sidebarOpen} />
             </div>
             <div>
-                <button className="text-gray-400 rounded-r-full bg-indigo-500 pr-2 py-4 absolute left-13 top-7" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                <button className="text-white rounded-r-full bg-indigo-500 pr-2 py-4 absolute left-13 top-7" onClick={() => setSidebarOpen(!sidebarOpen)}>
                     <FaArrowRight size={24} />
                 </button>
             </div>  
