@@ -103,15 +103,16 @@ const Dashboard = () => {
             <p className="font-semibold text-2xl">50%</p>
             <p>Tickets closed</p>
         </div>
-       <div className="mx-2 space-y-4 mt-20">
+       <div className="mx-2 space-y-4 mt-20 text-[13px]">
           <div className="bg-indigo-500 px-5 py-2 rounded-md"> 
               <p>25555 tickets closed</p>
           </div>
           <div className="bg-indigo-500 px-5 py-2 rounded-md"> 
-              <p>25555 tickets closed</p>
+              <p>125 Tickets Breached SLA</p>
           </div>
           <div className="bg-indigo-500 px-5 py-2 rounded-md"> 
-              <p>25555 tickets closed</p>
+              <p>12542 Tickets Escalations
+              </p>
           </div>
        </div>
  
