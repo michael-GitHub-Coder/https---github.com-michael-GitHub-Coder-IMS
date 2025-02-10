@@ -1,6 +1,38 @@
 import React from 'react'
+import { Fade, Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css'
 
 const Login = () => {
+
+  const spanStyle = {
+    padding: '20px',
+    background: '#efefef',
+    color: '#000000'
+  }
+  
+  const divStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundSize: 'cover',
+    height: '400px'
+  }
+  const slideImages = [
+    {
+      url: 'https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+      caption: 'Slide 1'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80',
+      caption: 'Slide 2'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+      caption: 'Slide 3'
+    },
+  ];
+
+  
   return (
     <div className="grid grid-cols-1 md:flex justify-center items-center h-screen px-5">
         <div className="bg-white px-5 py-4 md:flex flex-row gap-5 min-w-8xl">
@@ -22,8 +54,16 @@ const Login = () => {
               </div>
           </div>
           <div className="relative hidden md:block bg-indigo-500 rounded-md px-2 py-1 w-auto md:w-96 opacity-80">
-            <div className="flex justify-center">
-              <p className="absolute bottom-5  z-50 w-20 bg-gray-300 rounded-full"></p>
+            <div className="slide-container">
+              <Fade>
+              {slideImages.map((slideImage, index)=> (
+                  <div key={index}>
+                    <div style={{ ...divStyle, 'backgroundImage': `url(${slideImage.url})` }}>
+                      <span style={spanStyle}>{slideImage.caption}</span>
+                    </div>
+                  </div>
+                ))} 
+              </Fade>
             </div>
           </div>
         </div>
