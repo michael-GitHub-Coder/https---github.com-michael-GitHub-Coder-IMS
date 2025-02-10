@@ -21,8 +21,10 @@ const Login = () => {
                 <button className="text-indigo-500 cursor-pointer">Sign up</button>
               </div>
           </div>
-          <div className="hidden md:block bg-indigo-500 rounded-md px-2 py-1 w-auto md:w-96 opacity-80 ">
-              
+          <div className="relative hidden md:block bg-indigo-500 rounded-md px-2 py-1 w-auto md:w-96 opacity-80">
+            <div className="flex justify-center">
+              <p className="absolute bottom-5  z-50 w-10 bg-gray-300 rounded-full"></p>
+            </div>
           </div>
         </div>
     </div>
