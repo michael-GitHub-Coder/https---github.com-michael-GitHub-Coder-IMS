@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
 import { FiMenu, FiHome, FiSettings, FiUser } from "react-icons/fi";
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
@@ -30,21 +31,16 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen">
-      <Sidebar isOpen={sidebarOpen} />
-      <div className="flex-1 bg-gray-100 p-6 ml-16">
-        {/* <div className="flex justify-between items-center bg-white p-4 shadow-md">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)}>
-            <FiMenu size={24} />
-          </button>
-          <h1 className="text-xl font-bold">Dashboard</h1> 
-        </div> 
-
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">Card 1</div>
-          <div className="bg-white p-6 rounded-lg shadow-md">Card 2</div>
-          <div className="bg-white p-6 rounded-lg shadow-md">Card 3</div>
-        </div> */}
-      </div>
+        <div > 
+            <div className="flex relative">
+                <Sidebar isOpen={sidebarOpen} />
+            </div>
+            <div>
+                <button className="text-gray-400 rounded-r-full bg-indigo-500 pr-2 py-4 absolute left-13 top-7" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                    <FaArrowRight size={24} />
+                </button>
+            </div>  
+        </div>
     </div>
   );
 };
