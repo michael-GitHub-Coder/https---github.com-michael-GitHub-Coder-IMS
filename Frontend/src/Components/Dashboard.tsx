@@ -115,13 +115,25 @@ const Dashboard = () => {
               </p>
           </div>
        </div>
- 
-       <div className="flex gap-4 mt-10 mx-2">
-         <div className="bg-indigo-500">
-            r4fr
+        <p className="text-center mt-7 text-indigo-500 font-bold text-2xl">Open Tickets</p>
+       <div className="flex gap-4 mt-2 mx-2">
+         <div className="bg-indigo-500 w-22 h-20 rounded-md">
+            <p className="text-center mt-2  font-bold text-2xl">25</p>
+            <p className="text-center">Critical</p>
          </div>
-         <div className="bg-indigo-500">
-            r4fr
+         <div className="bg-indigo-500 w-22 h-20 rounded-md">
+            <p className="text-center mt-2 font-bold text-2xl">25</p>
+            <p className="text-center">High</p>
+         </div>
+       </div>
+       <div className="flex gap-4 mt-2 mx-2">
+         <div className="bg-indigo-500 w-22 h-20 rounded-md">
+            <p className="text-center mt-2  font-bold text-2xl">25</p>
+            <p className="text-center">Medium</p>
+         </div>
+         <div className="bg-indigo-500 w-22 h-20 rounded-md">
+            <p className="text-center mt-2 font-bold text-2xl">25</p>
+            <p className="text-center">Low</p>
          </div>
        </div>
       </div>
