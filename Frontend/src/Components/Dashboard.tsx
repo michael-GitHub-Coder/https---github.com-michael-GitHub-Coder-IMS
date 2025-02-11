@@ -60,7 +60,7 @@ const Dashboard = () => {
           <button className="bg-indigo-500 rounded-full px-2.5 py-2.5 text-white">User profile</button>
         </div> */}
         <div className="px-15 mt-5">
-          <table className="table-auto min-w-6xl">
+          <table className="table-auto min-w-6xl w-auto">
             <thead className="rounded-md bg-indigo-500 text-white ">
               <tr>
                 <th className="py-3">Song</th>
@@ -100,7 +100,7 @@ const Dashboard = () => {
           </table>
         </div>
       </div>
-      <div className={`${sidebarOpen ? "hidden" : "block"} bg-gray-400 h-[calc(100vh-70px)] mt-10 w-full -ml-10 mr-5 rounded-md text-white`}>
+      <div className={`${sidebarOpen ? "md:hidden" : "lg:block block"} bg-gray-400 h-[calc(100vh-70px)] justify-end mt-10 lg:w-55 md:w-full md:-ml-10 lg:-mr-100 md:mr-5 rounded-md text-white`}>
         <div className="flex flex-col bg-indigo-500 rounded-full text-center py-14 m-5 ">
             <p className="font-semibold text-2xl">50%</p>
             <p>Tickets closed</p>
