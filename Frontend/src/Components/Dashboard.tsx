@@ -61,40 +61,52 @@ const Dashboard = () => {
         </div> */}
         <div className="px-15 mt-5">
           <table className="table-auto min-w-6xl w-auto">
-            <thead className="rounded-md bg-indigo-500 text-white ">
-              <tr>
-                <th className="py-3">Song</th>
-                <th>Artist</th>
-                <th>Year</th>
-                <th>Song</th>
-                <th>Artist</th>
-                <th>Year</th>
+            <thead className="rounded-md bg-indigo-500 text-white">
+              <tr >
+                <th className="py-3 px-4 flex justify-start relative">Ticket ID
+                  <div className="w-0 h-0 border-l-15 border-r-15 border-t-15 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
+                </th>
+                <th className="py-3 px-4  relative">Priority
+                  <div className="w-0 h-0 border-l-15 border-r-15 border-t-15 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
+                </th>
+                <th className="py-3 px-4 relative">Ticket Group
+                  <div className="w-0 h-0 border-l-15 border-r-15 border-t-15 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
+                </th>
+                <th className="py-3 px-4 relative">Assigned by
+                  <div className="w-0 h-0 border-l-15 border-r-15 border-t-15 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
+                </th>
+                <th className="py-3 px-4 relative">Assigned to
+                  <div className="w-0 h-0 border-l-15 border-r-15 border-t-15 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
+                </th>
+                <th className="py-3 px-5 flex justify-start relative">Status
+                  <div className="w-0 h-0 border-l-15 border-r-15 border-t-15 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
+                </th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-                <td>Malcolm Lockyer</td>
-                <td>1961</td>
-                <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-                <td>Malcolm Lockyer</td>
-                <td>1961</td>
+            <tbody className="border border-gray-300">
+              <tr className="border border-gray-300 px-4 py-2">
+                <td>TN01254125458 </td>
+                <td>Critical</td>
+                <td>Pretoria North</td>
+                <td>Jackson Maloka</td>
+                <td>Michael Thulare</td>
+                <td>Open</td>
               </tr>
-              <tr>
-                <td>Witchy Woman</td>
-                <td>The Eagles</td>
-                <td>1972</td>
-                <td>Witchy Woman</td>
-                <td>The Eagles</td>
-                <td>1972</td>
+              <tr className="border border-gray-300 px-4 py-2">
+                <td>TN01254125458 </td>
+                <td>Critical</td>
+                <td>Pretoria North</td>
+                <td>Jackson Maloka</td>
+                <td>Michael Thulare</td>
+                <td>Open</td>
               </tr>
-              <tr>
-                <td>Shining Star</td>
-                <td>Earth, Wind, and Fire</td>
-                <td>1975</td>
-                <td>Shining Star</td>
-                <td>Earth, Wind, and Fire</td>
-                <td>1975</td>
+              <tr className="border border-gray-300 px-4 py-2">
+                <td>TN01254125458 </td>
+                <td>Critical</td>
+                <td>Pretoria North</td>
+                <td>Jackson Maloka</td>
+                <td>Michael Thulare</td>
+                <td>Open</td>
               </tr>
             </tbody>
           </table>
