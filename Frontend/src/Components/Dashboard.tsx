@@ -55,7 +55,7 @@ const Dashboard = () => {
       </div>
       
       <div className="flex flex-col">   
-        <div className="flex justify-end mr-5 mt-5">
+        <div className={`flex justify-end ${sidebarOpen ? "-mr-20" : "mr-5"}  mt-5`}>
           <button className="bg-indigo-500 rounded-full px-3 py-2 text-white cursor-pointer">User Profile</button>
         </div>
         <div className="flex">
