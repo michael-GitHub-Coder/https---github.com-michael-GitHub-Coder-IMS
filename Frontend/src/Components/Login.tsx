@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { Fade, Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 
@@ -50,12 +51,12 @@ const Login = () => {
               </div>
               <div className="flex justify-center text-gray-500 gap-4 font-semibold py-4">
                 <p>Don’t have an account? </p>
-                <button className="text-indigo-500 cursor-pointer">Sign up</button>
+                <Link to="/register"><button className="text-indigo-500 cursor-pointer">Sign up</button></Link>
               </div>
           </div>
           <div className="relative hidden md:block bg-indigo-500 rounded-md px-2 py-1 w-auto md:w-96 opacity-80">
             <div className="slide-container">
-              <Fade>
+              {/* <Fade>
               {slideImages.map((slideImage, index)=> (
                   <div key={index}>
                     <div style={{ ...divStyle, 'backgroundImage': `url(${slideImage.url})` }}>
@@ -63,7 +64,7 @@ const Login = () => {
                     </div>
                   </div>
                 ))} 
-              </Fade>
+              </Fade> */}
             </div>
           </div>
         </div>

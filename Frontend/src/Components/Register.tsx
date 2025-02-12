@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Register = () => {
   return (
@@ -18,7 +19,7 @@ const Register = () => {
                   </div>
                   <div className="flex justify-center text-gray-500 gap-4 font-semibold py-4">
                     <p>Don’t have an account? </p>
-                    <button className="text-indigo-500 cursor-pointer">Sign in</button>
+                    <Link to="/login" ><button className="text-indigo-500 cursor-pointer">Sign in</button></Link>
                   </div>
               </div>
               <div className="relative hidden md:block bg-indigo-500 rounded-md px-2 py-1 w-auto md:w-96 opacity-80">
