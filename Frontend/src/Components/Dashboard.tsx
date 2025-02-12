@@ -3,6 +3,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { FiBook, FiBookOpen, FiHome, FiLogOut, FiSettings, FiUser, FiUsers } from "react-icons/fi";
 import Table from "./Table";
 import AddTicket from "./AddTicket";
+import AddUser from "./AddUser";
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   return (
@@ -68,7 +69,8 @@ const Dashboard = () => {
               <button className="bg-indigo-500 rounded-full px-2.5 py-2.5 text-white">User profile</button>
             </div> */}
             {/* <Table /> */}
-            <AddTicket />
+            {/* <AddTicket /> */}
+            <AddUser />
           </div>
 
 
