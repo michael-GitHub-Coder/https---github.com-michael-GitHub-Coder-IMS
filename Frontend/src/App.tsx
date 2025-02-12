@@ -6,7 +6,7 @@ import Register from "./Components/Register"
 const App = () => {
   
   return (
-    <div className="bg-gray-100"><AddTicket /></div>
+    <div className="bg-gray-100"><Dashboard /></div>
   )
 }
 
