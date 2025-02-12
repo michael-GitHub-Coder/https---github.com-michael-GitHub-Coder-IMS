@@ -65,9 +65,6 @@ const Dashboard = () => {
 
 
           <div className="mt-5">
-            {/* <div className="flex justify-end">
-              <button className="bg-indigo-500 rounded-full px-2.5 py-2.5 text-white">User profile</button>
-            </div> */}
             {/* <Table /> */}
             {/* <AddTicket /> */}
             <AddUser />
