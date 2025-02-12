@@ -6,7 +6,7 @@ const AddUser = () => {
         <h1 className="text-center font-bold text-2xl -mt-10">Add new user</h1>
         <div className="flex flex-col justify-center px-5 min-w-6xl w-auto ml-10 mr-17 mt-5">
             <form>
-                <div className="grid gap-6 mb-6 md:grid-cols-2 my-5">  
+                <div className="grid gap-6 mb-6  my-5">  
                     <input 
                         placeholder="Email" 
                         className="w-full p-3 border border-gray-300 rounded-md bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white resize-none"
