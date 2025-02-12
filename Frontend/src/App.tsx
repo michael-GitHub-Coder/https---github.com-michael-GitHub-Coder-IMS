@@ -1,3 +1,4 @@
+import AddTicket from "./Components/AddTicket"
 import Dashboard from "./Components/Dashboard"
 import Login from "./Components/Login"
 import Register from "./Components/Register"
@@ -5,8 +6,10 @@ import Register from "./Components/Register"
 const App = () => {
   
   return (
-    <div className="bg-gray-100"><Dashboard /></div>
+    <div className="bg-gray-100"><AddTicket /></div>
   )
 }
 
 export default App
+
+
