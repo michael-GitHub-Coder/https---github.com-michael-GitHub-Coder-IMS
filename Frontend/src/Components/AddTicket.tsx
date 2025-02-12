@@ -14,7 +14,7 @@ const AddTicket = () => {
                         className="w-full p-3 border border-gray-300 rounded-md bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" 
                         required
                     >
-                        <option value="" disabled selected>Assign technician</option>
+                        <option value="" disabled selected>Select technician</option>
                         <option value="tech1">Technician 1</option>
                         <option value="tech2">Technician 2</option>
                         <option value="tech3">Technician 3</option>
@@ -26,7 +26,7 @@ const AddTicket = () => {
                         className="w-full p-3 border border-gray-300 rounded-md bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" 
                         required
                     >
-                        <option value="" disabled selected>Assign group</option>
+                        <option value="" disabled selected>Select group</option>
                         <option value="group1">Group 1</option>
                         <option value="group2">Group 2</option>
                         <option value="group3">Group 3</option>
