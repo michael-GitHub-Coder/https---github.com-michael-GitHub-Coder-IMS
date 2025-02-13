@@ -4,6 +4,7 @@ import { FiBook, FiBookOpen, FiHome, FiLogOut, FiSettings, FiUser, FiUsers } fro
 import Table from "./Table";
 import AddTicket from "./AddTicket";
 import AddUser from "./AddUser";
+import { Link, Outlet } from "react-router-dom";
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   return (
@@ -14,26 +15,42 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     >
       <div className="flex flex-col space-y-6">
         <div className="flex items-center space-x-3 cursor-pointer">
-          <FiHome size={24} />
-          {isOpen && <span>Dashboard</span>}
+            <Link to="/dashboard">
+              <div className="flex gap-2">
+                <FiHome size={24} />
+                {isOpen && <span>Dashboard</span>}
+              </div>
+            </Link>
         </div>
        <div className="absolute top-[38%]">
         <div className="flex items-center space-x-3 cursor-pointer">
-            <FiUser size={24} />
-            {isOpen && <span>New user</span>}
+            <Link to="/dashboard/Add-user">
+              <div className="flex gap-2">
+                <FiUser size={24} />
+                {isOpen && <span>New user</span>}
+              </div>
+            </Link>
           </div>
           <div className="flex items-center space-x-3 mt-5 cursor-pointer">
-            <FiBookOpen size={24} />
-            {isOpen && <span>New Ticket</span>}
+            <Link to="/dashboard/Add-ticket">
+              <div className="flex gap-2">
+                <FiBookOpen size={24}  />
+                {isOpen && <span>New Ticket</span>}
+              </div>
+            </Link>
           </div>
           <div className="flex items-center space-x-3 mt-5 cursor-pointer">
-            <FiUsers size={24} />
-            {isOpen && <span>New group</span>}
+            <Link to="/dashboard/Add-ticket">
+                <div className="flex gap-2">
+                  <FiUsers size={24} />
+                  {isOpen && <span>New group</span>}
+                </div>
+            </Link>
           </div>
        </div>
        <div className="flex items-center space-x-3 absolute top-[93%] cursor-pointer">
           <FiLogOut size={24} />
-          {isOpen && <span>Dashboard</span>}
+          {isOpen && <span>Sign Out</span>}
         </div>
       </div>
     </div>
@@ -67,7 +84,8 @@ const Dashboard = () => {
           <div className="mt-5">
             {/* <Table /> */}
             {/* <AddTicket /> */}
-            <AddUser />
+            {/* <AddUser /> */}
+            <Outlet />
           </div>
 
 

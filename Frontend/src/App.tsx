@@ -3,15 +3,20 @@ import Register from "./Components/Register"
 import Mainlayout from "./layout/Mainlayout"
 import Login from "./Components/Login"
 import Dashboard from "./Components/Dashboard"
+import AddUser from "./Components/AddUser"
+import AddTicket from "./Components/AddTicket"
 
 const App = () => {
   
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Mainlayout/>} >
-        <Route index element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} >
+          <Route path="Add-user" element={<AddUser />} />
+          <Route path="Add-ticket" element={<AddTicket />} />
+        </Route>
       </Route>
     )
   )
