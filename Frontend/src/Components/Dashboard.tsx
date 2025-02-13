@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     >
       <div className="flex flex-col space-y-6">
         <div className="flex items-center space-x-3 cursor-pointer">
-            <Link to="/dashboard">
+            <Link to="/dashboard/table">
               <div className="flex gap-2">
                 <FiHome size={24} />
                 {isOpen && <span>Dashboard</span>}
