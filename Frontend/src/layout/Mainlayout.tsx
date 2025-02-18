@@ -7,7 +7,6 @@ import Register from "../Components/Register"
 const Mainlayout = () => {
   return (
     <div>
-        <Register />
         <Outlet />
     </div>
   )

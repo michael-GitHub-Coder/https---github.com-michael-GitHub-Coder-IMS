@@ -43,7 +43,7 @@ const Login = () => {
               <input type="text" placeholder="Enter the email" className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500  bg-gray-300 w-auto md:w-96 mt-7"/>
               <input type="text" placeholder="Enter the Password" className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500 bg-gray-300 w-auto md:w-96 mt-7"/>
               <p className="flex py-3 justify-end text-black font-bold cursor-pointer">Forgot Password?</p>
-              <button className="font-bold px-2 py-3 rounded-md bg-gray-300 w-auto md:w-96  text-gray-500 hover:text-white cursor-pointer hover:bg-gray-500">Sign in</button>
+              <Link to="/dashboard"><button className="font-bold px-2 py-3 rounded-md bg-gray-300 w-auto md:w-96  text-gray-500 hover:text-white cursor-pointer hover:bg-gray-500">Sign in</button></Link>
               <div className="flex text-gray-500 py-4">
                 <p className="border-b-2 border-gray-500 w-[45%] mb-2"></p>
                 <p className="text-gray-400 mx-2 mt-2">OR</p>
