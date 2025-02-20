@@ -4,7 +4,7 @@ import Login from "../Components/Login"
 const Mainlayout = () => {
   return (
     <div>
-        <Outlet />
+      <Outlet />
     </div>
   )
 }

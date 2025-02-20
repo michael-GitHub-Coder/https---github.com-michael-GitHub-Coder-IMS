@@ -1,12 +1,41 @@
 import { useState } from "react";
+import {useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLogoutMutation } from '../slices/usersAPISlice';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { FiBook, FiBookOpen, FiHome, FiLogOut, FiSettings, FiUser, FiUsers } from "react-icons/fi";
 //import Table from "./Table";
 //import AddTicket from "./AddTicket";
 //import AddUser from "./AddUser";
 import { Link, Outlet } from "react-router-dom";
+import { clearCredentials } from "../slices/authSlice";
+
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
+
+  const { userInfo } = useSelector((state: any) => state.auth);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [logoutAPIcall] = useLogoutMutation();
+
+  
+
+  const hanldeLogout = async (e:any) =>{
+    e.preventDefault();
+    
+    try {
+       await logoutAPIcall({}).unwrap();
+       dispatch(clearCredentials());
+       navigate("/login");
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
   return (
     <div
       className={`bg-indigo-500 relative rounded-md mt-5 text-white p-5 fixed top-0 left-0 transition-all duration-300 ${
@@ -50,7 +79,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
        </div>
        <div className="flex items-center space-x-3 absolute top-[93%] cursor-pointer">
           <FiLogOut size={24} />
-          {isOpen && <span>Sign Out</span>}
+          {isOpen && <span>Sign Out</span>} //hanldeLogout here
         </div>
       </div>
     </div>
@@ -59,7 +88,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
+ 
   return (
     <div className="bg-white flex h-screen w-full">
    

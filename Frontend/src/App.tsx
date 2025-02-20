@@ -11,16 +11,16 @@ const App = () => {
   
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Mainlayout/>} >
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} >
-          <Route index element={<Table />} /> 
-          <Route path="Add-user" element={<AddUser />} />
-          <Route path="Add-ticket" element={<AddTicket />} />
-          <Route path="table" element={<Table />} />
-        </Route>
+
+      <>
+      <Route path="/" element={<Login />} />
+      <Route path="/dashboard" element={<Dashboard />} >
+        <Route index element={<Table />} /> 
+        <Route path="Add-user" element={<AddUser />} />
+        <Route path="Add-ticket" element={<AddTicket />} />
+        <Route path="table" element={<Table />} />
       </Route>
+      </>
     )
   )
   return (
@@ -31,3 +31,14 @@ const App = () => {
 export default App
 
 
+
+{/* <Route path="/" element={<Mainlayout/>} >
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} >
+          <Route index element={<Table />} /> 
+          <Route path="Add-user" element={<AddUser />} />
+          <Route path="Add-ticket" element={<AddTicket />} />
+          <Route path="table" element={<Table />} />
+        </Route>
+      </Route> */}
