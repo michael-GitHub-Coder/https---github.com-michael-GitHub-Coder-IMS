@@ -15,7 +15,7 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [login, {isLoading}] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const { userInfo } = useSelector((state: any) => state.auth);
 

@@ -1,6 +1,4 @@
-import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { Fade, Slide } from 'react-slideshow-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState,useEffect } from 'react';
 import { useLoginMutation } from '../slices/usersAPISlice';
@@ -16,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [login, {isLoading}] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const { userInfo } = useSelector((state: any) => state.auth);
 
