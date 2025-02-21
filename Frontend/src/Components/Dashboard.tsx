@@ -28,7 +28,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     try {
        await logoutAPIcall({}).unwrap();
        dispatch(clearCredentials());
-       navigate("/login");
+       navigate("/");
       
     } catch (error) {
       console.log(error)
@@ -77,9 +77,9 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
             </Link>
           </div>
        </div>
-       <div className="flex items-center space-x-3 absolute top-[93%] cursor-pointer">
+       <div className="flex items-center space-x-3 absolute top-[93%] cursor-pointer" onClick={hanldeLogout}>
           <FiLogOut size={24} />
-          {isOpen && <span>Sign Out</span>} //hanldeLogout here
+          {isOpen && <span>Sign Out</span>} 
         </div>
       </div>
     </div>

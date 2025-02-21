@@ -50,28 +50,28 @@ const Register = () => {
                       type="text" 
                       value={name}
                       onChange={(e)=> setName(e.target.value)}
-                      placeholder="Enter the email" 
+                      placeholder="FullName" 
                       className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500  bg-gray-300 w-auto md:w-96 mt-7"
                     />
                     <input 
                       type="text" 
                       value={email}
                       onChange={(e)=> setEmail(e.target.value)}
-                      placeholder="Enter the email" 
+                      placeholder="Email" 
                       className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500  bg-gray-300 w-auto md:w-96 mt-7"
                     />
                     <input 
                       type="text" 
                       value={password}
                       onChange={(e)=> setPassword(e.target.value)}
-                      placeholder="Enter the Password" 
+                      placeholder="Password" 
                       className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500 bg-gray-300 w-auto md:w-96 mt-5"
                     />
                     <input 
                       type="text" 
                       value={confirmPassword}
                       onChange={(e)=> setConfirmPassword(e.target.value)}
-                      placeholder="Confirm the Password" 
+                      placeholder="Confirm Password" 
                       className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500 bg-gray-300 w-auto md:w-96 mt-5"
                     />
                     <button className="font-bold px-2 py-3 rounded-md bg-gray-300 w-auto md:w-96  text-gray-500 hover:text-white cursor-pointer hover:bg-gray-500 mt-5">Sign up</button>
@@ -83,7 +83,7 @@ const Register = () => {
                   </div>
                   <div className="flex justify-center text-gray-500 gap-4 font-semibold py-4">
                     <p>Don’t have an account? </p>
-                    <Link to="/login" >
+                    <Link to="/" >
                       <button className="text-indigo-500 cursor-pointer">Sign in</button>
                     </Link>
                   </div>

@@ -1,6 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom"
 import Register from "./Components/Register"
-import Mainlayout from "./layout/Mainlayout"
 import Login from "./Components/Login"
 import Dashboard from "./Components/Dashboard"
 import AddUser from "./Components/AddUser"
@@ -14,6 +13,7 @@ const App = () => {
 
       <>
       <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} >
         <Route index element={<Table />} /> 
         <Route path="Add-user" element={<AddUser />} />

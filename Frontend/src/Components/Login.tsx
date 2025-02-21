@@ -49,14 +49,14 @@ const Login = () => {
                   type="text" 
                   value={email}
                   onChange={(e)=>setEmail(e.target.value)}
-                  placeholder="Enter the email" 
+                  placeholder="Email" 
                   className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500  bg-gray-300 w-auto md:w-96 mt-7"
                 />
                 <input 
                   type="password" 
                   value={password}
                   onChange={(e)=>setPassword(e.target.value)}
-                  placeholder="Enter the Password" 
+                  placeholder="Password" 
                   className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white font-bold px-2 py-3 rounded-md text-gray-500 bg-gray-300 w-auto md:w-96 mt-7"
                 />
                 <p className="flex py-3 justify-end text-black font-bold cursor-pointer">Forgot Password?</p>
