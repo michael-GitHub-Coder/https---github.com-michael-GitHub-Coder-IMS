@@ -24,6 +24,13 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        addUser: builder.mutation({
+            query: (data)=>({
+                url: `${USERS_URL}/member`,
+                method: "POST",
+                body: data
+            })
+        }),
         getTickets: builder.query({
             query:()=>({
                 url: `${USERS_URL}/All-Tickets`,
@@ -33,4 +40,4 @@ export const usersAPISlice = apiSlice.injectEndpoints({
     })
 })
 
-export const { useLoginMutation,useLogoutMutation,useGetTicketsQuery } = usersAPISlice;
+export const { useLoginMutation,useLogoutMutation,useGetTicketsQuery,useAddUserMutation } = usersAPISlice;

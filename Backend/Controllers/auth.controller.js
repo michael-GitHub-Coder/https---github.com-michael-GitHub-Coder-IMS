@@ -197,9 +197,10 @@ export const checkAuth = async (req,res) =>{
 
 export const addMembers = async (req,res) =>{
    
-    const {email,name,password,role} = req.body;
 
-    if(!email || !name || !password || !role){
+    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode} = req.body;
+
+    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode){
         return res.status(400).json({message:"All fields are required"});
     }
 

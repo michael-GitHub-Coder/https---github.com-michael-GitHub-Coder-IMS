@@ -32,13 +32,9 @@ const Dashboard = () => {
           <button onClick={handleUserProfile} className="bg-indigo-500 rounded-full px-3 py-2 text-white cursor-pointer">User Profile</button>
         </div>
         <div className="flex">
-
-
-          <div className="mt-5">
+          <div className="mt-5 min-w-6xl">
             <Outlet />
           </div>
-
-
           <div className={`${sidebarOpen ? "hidden" : "block"} bg-gray-200 h-[calc(100vh-115px)] justify-end mt-5 lg:w-55 md:w-full md:-ml-10  md:mr-5 rounded-md text-white`}>
             <div className="flex flex-col justify-center bg-indigo-500 rounded-full text-center py-14 m-5 ">
                   <p className="font-semibold text-2xl">50%</p>
