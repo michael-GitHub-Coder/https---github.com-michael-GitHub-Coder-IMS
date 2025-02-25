@@ -4,7 +4,7 @@ const AddTicket = () => {
   return (
     <div>
         <h1 className="text-center font-bold text-2xl -mt-10">Add New Ticket</h1>
-        <div className="flex flex-col justify-center px-5 min-w-6xl w-auto ml-10 mr-17 mt-2">
+        <div className="flex flex-col justify-center px-10 min-w-6xl w-auto ml-10 mr-17 mt-2">
             <form>
                 <textarea 
                     placeholder="Type your message..." 
