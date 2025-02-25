@@ -19,8 +19,9 @@ const Login = () => {
   const { userInfo } = useSelector((state: any) => state.auth);
 
   useEffect(()=>{
-    if(userInfo){
+    if(userInfo === true && userInfo !== null){
       navigate("/dashboard");
+      console.log("user info",userInfo);
     }
   },[navigate, userInfo]);
 
@@ -31,7 +32,7 @@ const Login = () => {
       const res = await login({email, password}).unwrap();
       dispatch(setCredentials({...res}));
       navigate("/dashboard");
-      console.log(userInfo);
+     
     } catch (error) {
       console.log(error)
     }

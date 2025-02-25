@@ -75,6 +75,7 @@ export const login = async (req, res) => {
 			},
 		});
 	} catch (error) {
+      
 		console.log("Error in login ", error);
 		res.status(400).json({ success: false, message: error.message });
 	}
@@ -198,9 +199,9 @@ export const checkAuth = async (req,res) =>{
 export const addMembers = async (req,res) =>{
    
 
-    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode} = req.body;
+    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password} = req.body;
 
-    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode){
+    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password){
         return res.status(400).json({message:"All fields are required"});
     }
 
@@ -225,9 +226,7 @@ export const addMembers = async (req,res) =>{
 		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newUser = new User({
-			email,
-			name,
-            role,
+			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,
 			password:hashedPassword,
 			verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000

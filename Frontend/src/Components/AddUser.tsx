@@ -8,6 +8,7 @@ const AddUser = () => {
     
    const [firstName,setfirstName] = useState<string>("");
    const [lastName,setlastName] = useState<string>("");
+   const [password,setPassword] = useState<string>("12345");
    const [email,setEmail] = useState<string>("");
    const [role,setRole] = useState<string>("");
    const [phoneNumber,setphoneNumber] = useState<string>("");
@@ -33,7 +34,7 @@ const AddUser = () => {
         e.preventDefault();
 
         try {
-            const res = await addUser({firstName,lastName,email, phoneNumber,bio,country,postalCode,role}).unwrap();
+            const res = await addUser({firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password}).unwrap();
             dispatch(setCredentials({...res}));
             // navigate("/dashboard");
 
@@ -69,19 +70,20 @@ const AddUser = () => {
                 <input 
                     type="email" 
                     placeholder="Email" 
-                    value={role}
-                    onChange={(e)=>setRole(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" 
-                    required
-                />
-                <input 
-                    type="email" 
-                    placeholder="Email" 
                     value={email}
                     onChange={(e)=>setEmail(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" 
                     required
                 />
+                <select
+                    value={role}
+                    onChange={(e)=>setRole(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" 
+                    required
+                    ><option value="" disabled selected>Select role</option>
+                    <option value="Technician">Technician</option>
+                    <option value="Supervisor">Supervisor</option>
+                </select>
             </div>
            
             <input 
