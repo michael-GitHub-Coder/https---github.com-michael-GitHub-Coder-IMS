@@ -4,7 +4,7 @@ const AddUser = () => {
   return (
     <div>
         <h1 className="text-center font-bold text-2xl -mt-10">Add new user</h1>
-        <div className="flex flex-col justify-center px-50 min-w-6xl w-auto ml-10 mr-17 mt-5">
+        <div className="flex flex-col justify-center px-50 min-w-6xl w-auto ml-10 mr-17">
             <form>
                 <div className="grid gap-6 mb-6  my-5">  
                     <input 

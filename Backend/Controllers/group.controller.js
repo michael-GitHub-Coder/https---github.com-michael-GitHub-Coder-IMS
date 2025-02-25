@@ -34,7 +34,6 @@ export const getAllGroups = async (req,res) =>{
     }
 }
 
-
 export const addToGroup = async (req, res) =>{
     
     const {regionId, supervisorId} = req.body;

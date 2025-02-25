@@ -8,8 +8,8 @@ import 'react-slideshow-image/dist/styles.css'
 
 const Login = () => {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Login = () => {
     }
   },[navigate, userInfo]);
 
-  const submitHandler = async (e:any) =>{
+  const submitHandler = async (e: React.FormEvent) =>{
     e.preventDefault();
     
     try {

@@ -23,8 +23,14 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data
             })
+        }),
+        getTickets: builder.query({
+            query:()=>({
+                url: `${USERS_URL}/All-Tickets`,
+                method:"GET"
+            })
         })
     })
 })
 
-export const { useLoginMutation,useLogoutMutation } = usersAPISlice;
+export const { useLoginMutation,useLogoutMutation,useGetTicketsQuery } = usersAPISlice;
