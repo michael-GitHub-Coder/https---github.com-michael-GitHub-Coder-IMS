@@ -6,6 +6,7 @@ import AddUser from "./Components/AddUser"
 import AddTicket from "./Components/AddTicket"
 import Table from "./Components/Table"
 import Addgroup from "./Components/AddGroup"
+import Userprofile from "./Components/Userprofile"
 
 const App = () => {
   
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="Add-ticket" element={<AddTicket />} />
         <Route path="table" element={<Table />} />
         <Route path="Add-group" element={<Addgroup />}/>
+        <Route path="Profile" element={<Userprofile />} />
       </Route>
       </>
     )

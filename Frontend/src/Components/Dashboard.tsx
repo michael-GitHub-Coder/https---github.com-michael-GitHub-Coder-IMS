@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
- 
+  const navigate = useNavigate();
+
+  
+  const handleUserProfile = () =>{
+      navigate("/dashboard/Profile")
+  }
+
   return (
     <div className="bg-white flex h-screen w-full">
    
@@ -23,7 +29,7 @@ const Dashboard = () => {
       
       <div className="flex flex-col">   
         <div className={`flex justify-end ${sidebarOpen ? "-mr-20" : "mr-5"}  mt-5`}>
-          <button className="bg-indigo-500 rounded-full px-3 py-2 text-white cursor-pointer">User Profile</button>
+          <button onClick={handleUserProfile} className="bg-indigo-500 rounded-full px-3 py-2 text-white cursor-pointer">User Profile</button>
         </div>
         <div className="flex">
 
