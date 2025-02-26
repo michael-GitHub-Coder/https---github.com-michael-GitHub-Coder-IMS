@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useGetTicketsQuery } from '../slices/usersAPISlice';
 
 const Table = () => {
+  
   const { userInfo } = useSelector((state: any) => state.auth);
   const { data: tickets, error, isLoading } = useGetTicketsQuery({});
 
