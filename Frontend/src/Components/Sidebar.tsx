@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
 
   return (
     <div
-      className={`bg-indigo-500 relative rounded-md mt-5 text-white p-5 fixed top-0 left-0 transition-all duration-300 ${
+      className={`bg-indigo-500 relative rounded-md mt-5 text-white p-5 fixed top-0 left-5 transition-all duration-300 ${
         isOpen ? "w-40" : "w-16"
       } h-[calc(100vh-50px)]`}
     >

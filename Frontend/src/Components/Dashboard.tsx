@@ -19,8 +19,8 @@ const Dashboard = () => {
       <div className="relative">
         <Sidebar isOpen={sidebarOpen} />
         <button
-          className="text-white rounded-r-full cursor-pointer bg-indigo-500 pr-3 pl-2 py-4 absolute top-7 transition-all duration-300"
-          style={{ left: sidebarOpen ? "10rem" : "3.5rem" }} 
+          className="text-white rounded-r-full cursor-pointer bg-indigo-500 pr-3 pl-2 py-4 absolute top-7 transition-all duration-300 "
+          style={{ left: sidebarOpen ? "10rem" : "4.5rem" }} 
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           {sidebarOpen ? <FaArrowLeft size={24} /> : <FaArrowRight size={24} />}

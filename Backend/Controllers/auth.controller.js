@@ -263,3 +263,36 @@ export const getAllUsers = async (req,res) =>{
         res.status(500).json({success:false,message:error.message});
     }
 }
+
+export const updateUser = async (req,res) =>{
+
+    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password} = req.body;
+    const {id} = req.params;
+
+
+    try {
+
+        const user = await User.findById(id).select("-password");
+        if(!user){
+            return res.status(400).json({message:"Permission Denied"});
+        }
+        
+        user.firstName = firstName,
+        user.lastName = lastName,
+        user.email = email,
+        user.role = role,
+        user.phoneNumber = phoneNumber,
+        user.bio = bio,
+        user.country = country,
+        user.postalCode = postalCode,
+       
+        await user.save();
+        res.status(200).json({message:"Profile updated",ticket});
+
+    } catch (error) {
+        console.log("Something went wrong", error.message);
+        res.status(500).json({message: "Something went wrong"});
+    }
+
+
+}

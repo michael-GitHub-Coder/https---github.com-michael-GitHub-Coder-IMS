@@ -1,5 +1,5 @@
 import express  from "express";
-import { login,addMembers, signup, logout, verifyEmail, forgotPassword, resetPassord,checkAuth,getAllUsers} from "../Controllers/auth.controller.js";
+import { login,addMembers, signup, logout, verifyEmail, forgotPassword, resetPassord,checkAuth,getAllUsers, updateUser} from "../Controllers/auth.controller.js";
 import { verifyToken } from "../middleware/veifyToken.js";
 import { addTicket,updateTicket,updateTicketstatus,getAllTickets ,getIncidentByStatus} from "../Controllers/incident.controller.js";
 import {addRegion,getAllRegions} from "../Controllers/region.controller.js";
@@ -21,6 +21,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassord);
 router.get("/All-Users",getAllUsers);
 
+router.put("/Update-profile/:id",verifyToken,updateUser);
 
 //tickets 
 
