@@ -20,8 +20,8 @@ const Login = () => {
 
   useEffect(()=>{
     if(userInfo === true && userInfo !== null){
-      navigate("/dashboard");
       console.log("user info",userInfo);
+      navigate("/dashboard");
     }
   },[navigate, userInfo]);
 

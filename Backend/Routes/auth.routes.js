@@ -21,7 +21,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassord);
 router.get("/All-Users",getAllUsers);
 
-router.put("/Update-profile/:id",verifyToken,updateUser);
+router.put("/Update-profile/:_id",verifyToken,updateUser);
 
 //tickets 
 

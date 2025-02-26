@@ -31,6 +31,12 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        getMe: builder.query({
+            query:()=>({
+                url: `${USERS_URL}/All-Tickets`,
+                method:"GET"
+            })
+        }),
         getTickets: builder.query({
             query:()=>({
                 url: `${USERS_URL}/All-Tickets`,
@@ -38,8 +44,8 @@ export const usersAPISlice = apiSlice.injectEndpoints({
             })
         }),
         updateProfile: builder.mutation({
-           query:({id, ...data})=>({
-                url: `${USERS_URL}/Update-profile/${id}`,
+           query:({_id, ...data})=>({
+                url: `${USERS_URL}/Update-profile/${_id}`,
                 method: "PUT",
                 body: data
            })

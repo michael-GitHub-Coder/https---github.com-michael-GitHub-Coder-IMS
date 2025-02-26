@@ -5,23 +5,25 @@ import { useUpdateProfileMutation } from '../slices/usersAPISlice';
 import { useNavigate } from 'react-router-dom';
 import { setCredentials } from '../slices/authSlice';
 
+
 const UserProfile = () => {
+
   const [isEditingPersonal, setIsEditingPersonal] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+
 
   const [personalInfo, setPersonalInfo] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     bio: '',
   });
 
   const [addressInfo, setAddressInfo] = useState({
     country: '',
-    cityState: '',
+    city: '',
     postalCode: '',
-    taxId: '',
   });
 
   const navigate = useNavigate();
@@ -29,21 +31,23 @@ const UserProfile = () => {
   const [updateProfile] = useUpdateProfileMutation();
   const { userInfo } = useSelector((state: any) => state.auth);
 
+  
+  console.log("today rr",userInfo)
+
   useEffect(() => {
     if (userInfo) {
       setPersonalInfo({
-        firstName: userInfo.firstName || '',
-        lastName: userInfo.lastName || '',
-        email: userInfo.email || '',
-        phone: userInfo.phoneNumber || '',
-        bio: userInfo.bio || '',
+        firstName: userInfo.user.firstName || '',
+        lastName: userInfo.user.lastName || '',
+        email: userInfo.user.email || '',
+        phoneNumber: userInfo.user.phoneNumber || '',
+        bio: userInfo.user.bio || '',
       });
 
       setAddressInfo({
-        country: userInfo.country || '',
-        cityState: userInfo.cityState || '',
-        postalCode: userInfo.postalCode || '',
-        taxId: userInfo.taxId || '',
+        country: userInfo.user.country || '',
+        city: userInfo.user.city || '',
+        postalCode: userInfo.user.postalCode || '',
       });
     }
   }, [userInfo]);
@@ -70,10 +74,11 @@ const UserProfile = () => {
   const submitHandler = async (section: 'personal' | 'address') => {
     try {
       const updatedData = section === 'personal' ? personalInfo : addressInfo;
-      const res = await updateProfile({ id: userInfo.id, ...updatedData }).unwrap();
+      const res = await updateProfile({ _id: userInfo.user._id, ...updatedData }).unwrap();
+      console.log("API responce",res);
       dispatch(setCredentials(res));
-      navigate('/table');
-    } catch (error) {
+      navigate('/dashboard/table');
+    } catch (error) {    
       console.log('Update failed:', error);
     }
   };
@@ -95,8 +100,8 @@ const UserProfile = () => {
                     <h2 className="text-lg font-semibold">
                       {personalInfo.firstName} {personalInfo.lastName}
                     </h2>
-                    <p className="text-sm text-gray-600">Product Designer</p>
-                    <p className="text-sm text-gray-600">Los Angeles, California, USA</p>
+                    <p className="text-sm text-gray-600">{personalInfo.bio}</p>
+                    <p className="text-sm text-gray-600">{addressInfo.city}, {addressInfo.country}</p>
                   </div>
                 </div>
               </div>
@@ -110,7 +115,7 @@ const UserProfile = () => {
                       className="flex gap-2 border border-gray-200 px-2 rounded-md"
                       onClick={() => handleEditToggle('personal')}
                     >
-                      {isEditingPersonal ? <FaSave size={12} /> : <FaPenAlt size={12} />}
+                      {isEditingPersonal ? <FaSave size={12} className="mt-1.5"/> : <FaPenAlt size={12} className="mt-1.5" />}
                       {isEditingPersonal ? 'Save' : 'Edit'}
                     </button>
                   </div>
@@ -159,33 +164,33 @@ const UserProfile = () => {
                     {isEditingPersonal ? (
                       <input
                         type="text"
-                        name="phone"
-                        value={personalInfo.phone}
+                        name="phoneNumber"
+                        value={personalInfo.phoneNumber}
                         onChange={(e) => handleChange(e, 'personal')}
                         className="border p-1 rounded"
                       />
                     ) : (
-                      <span>{personalInfo.phone}</span>
+                      <span>{personalInfo.phoneNumber}</span>
                     )}
 
                     <span>Bio</span>
                     {isEditingPersonal ? (
                       <input
                         type="text"
-                        name="phone"
-                        value={personalInfo.phone}
+                        name="bio"
+                        value={personalInfo.bio}
                         onChange={(e) => handleChange(e, 'personal')}
                         className="border p-1 rounded"
                       />
                     ) : (
-                      <span>{personalInfo.phone}</span>
+                      <span>{personalInfo.bio}</span>
                     )}
                   </div>
                 </div>
               </div>
 
               {/* Address Section */}
-              <div className="border border-gray-200 rounded-md px-5 py-2">
+              <div className="border border-gray-200  rounded-md px-5 py-2 ">
                 <div className="mb-4">
                   <div className="flex justify-between mb-2">
                     <h3 className="text-md font-semibold">Address</h3>
@@ -193,7 +198,7 @@ const UserProfile = () => {
                       className="flex gap-2 border border-gray-200 px-2 rounded-md"
                       onClick={() => handleEditToggle('address')}
                     >
-                      {isEditingAddress ? <FaSave size={12} /> : <FaPenAlt size={12} />}
+                      {isEditingAddress ? <FaSave size={12} className="mt-1.5"/> : <FaPenAlt size={12} className="mt-1.5"/>}
                       {isEditingAddress ? 'Save' : 'Edit'}
                     </button>
                   </div>
@@ -216,13 +221,26 @@ const UserProfile = () => {
                     {isEditingAddress ? (
                       <input
                         type="text"
-                        name="cityState"
-                        value={addressInfo.cityState}
+                        name="city"
+                        value={addressInfo.city}
                         onChange={(e) => handleChange(e, 'address')}
                         className="border p-1 rounded"
                       />
                     ) : (
-                      <span>{addressInfo.cityState}</span>
+                      <span>{addressInfo.city}</span>
+                    )}
+
+                    <span>Postal Code</span>
+                    {isEditingAddress ? (
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={addressInfo.postalCode}
+                        onChange={(e) => handleChange(e, 'address')}
+                        className="border p-1 rounded"
+                      />
+                    ) : (
+                      <span>{addressInfo.postalCode}</span>
                     )}
                   </div>
                 </div>
