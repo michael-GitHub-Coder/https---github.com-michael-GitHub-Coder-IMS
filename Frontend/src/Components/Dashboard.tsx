@@ -16,11 +16,17 @@ const Dashboard = () => {
   const [NoOfHigh, setNoOfHigh] = useState(0);
   const [NoOfLow, setNoOfLow] = useState(0);
   const [NoOfMedium, setNoOfMedium] = useState(0);
-
-
+  const [ClosedTickets,setClosedTickets] = useState(0);
+  const [totTickets,settotTickets] = useState(0);
+  
   useEffect(() => {
     if (tickets) {
       
+      settotTickets(tickets.tickets.length);
+
+      const filteredTicketsClosed = tickets.tickets.filter((data: any) => data.status !== "Closed");
+      setClosedTickets(tickets.tickets.length - filteredTicketsClosed.length);
+
       const filteredTicketsCritical = tickets.tickets.filter((data: any) => data.priority !== "Critical");
       setNoOFCritical(tickets.tickets.length - filteredTicketsCritical.length);
 
@@ -35,6 +41,8 @@ const Dashboard = () => {
     }
   }, [tickets]);
 
+
+  const t = Math.round((ClosedTickets / totTickets) * 100);
   
 
   const handleUserProfile = () =>{
@@ -65,7 +73,7 @@ const Dashboard = () => {
           </div>
           <div className={`${sidebarOpen ? "hidden" : "block"} bg-gray-200 h-[calc(100vh-115px)] justify-end mt-5 lg:w-55 md:w-full md:-ml-10  md:mr-5 rounded-md text-white`}>
             <div className="flex flex-col justify-center bg-indigo-500 rounded-full text-center py-14 m-5 ">
-                  <p className="font-semibold text-2xl">50%</p>
+                  <p className="font-semibold text-2xl">{t}%</p>
                   <p>Tickets closed</p>
               </div>
             <div className="mx-2 space-y-4 mt-10 text-[13px]">
