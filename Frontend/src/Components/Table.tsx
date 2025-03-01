@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation } from "../slices/usersAPISlice";
 
 const Table = () => {
@@ -17,9 +17,9 @@ const Table = () => {
 
   const [dropdownTicketId, setDropdownTicketId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [dropdownStatusTicketId, setDropdownStatusTicketId] = useState<string | null>(null);
+  const [statusSearchQuery, setStatusSearchQuery] = useState("");
 
-
-  console.log(tickets)
   useEffect(() => {
     if (dropdownTicketId) setSearchQuery("");
   }, [dropdownTicketId]);
@@ -31,16 +31,17 @@ const Table = () => {
   }, [totalPages]);
 
   const handleAssignClick = (ticketId: string) => {
-    console.log("Clicked assign for ticket:", ticketId, "Current dropdown:", dropdownTicketId);
     setDropdownTicketId(ticketId === dropdownTicketId ? null : ticketId);
     setSearchQuery(""); 
   };
 
-  
+  const handleStatusChangeClick = (ticketId: string) => {
+    setDropdownStatusTicketId(ticketId === dropdownStatusTicketId ? null : ticketId);
+    setStatusSearchQuery(""); 
+  };
+
   const handleUserSelect = async (ticketId: string, assignedTo: string) => {
-    console.log("Updating ticket with ID:", ticketId);
     try {
-      console.log("this is the id ",ticketId)
       await updateTicket({ ticketId: ticketId, assignedTo });
       setDropdownTicketId(null);
       refetch();
@@ -49,7 +50,19 @@ const Table = () => {
     }
   };
 
-  console.log(tickets)
+  const handleStatusSelect = async (ticketId: string, status: string, assignedToId: string | undefined) => {
+    console.log("Updating ticket with ID:", ticketId, "Status:", status, "Assigned to:", assignedToId);
+  
+    try {
+      const response = await updateTicket({ ticketId, status, assignedTo: assignedToId });
+      console.log("Response:", response);
+      setDropdownStatusTicketId(null);
+      refetch();
+    } catch (error) {
+      console.error("Error updating ticket:", error);
+    }
+  };
+
   return (
     <div className="ml-10 mr-17">
       {isLoading && <p className="text-center">Loading tickets...</p>}
@@ -75,8 +88,7 @@ const Table = () => {
                     <td className="py-2 px-4">{ticket.supervisorId?.firstName}</td>
                     <td className="py-2 px-4 relative">
                       <div onClick={() => handleAssignClick(ticket._id)} className="cursor-pointer">
-                       {/* {"Unassigned"}  */}
-                       {ticket.assignedTo?.firstName || "Unassigned"} 
+                      {ticket.assignedTo? `${ticket.assignedTo.firstName ?? ""} ${ticket.assignedTo.lastName ?? ""}`.trim(): "Unassigned"}
                       </div>
                       {dropdownTicketId === ticket._id && (
                         <div className="absolute bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
@@ -104,7 +116,36 @@ const Table = () => {
                         </div>
                       )}
                     </td>
-                    <td className="py-2 px-4">{ticket.status}</td>
+                    <td className="py-2 px-4 relative">
+                      <div onClick={() => handleStatusChangeClick(ticket._id)} className="cursor-pointer">
+                        {ticket.status}
+                      </div>
+                      {dropdownStatusTicketId === ticket._id && (
+                        <div className="absolute bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
+                          <input
+                            type="text"
+                            className="w-full p-2 border-b"
+                            placeholder="Search status..."
+                            value={statusSearchQuery}
+                            onChange={(e) => setStatusSearchQuery(e.target.value)}
+                          />
+                          <ul className="max-h-40 overflow-auto">
+                            {["Open", "In Progress", "Closed"].filter((status) =>
+                                status.toLowerCase().includes(statusSearchQuery.toLowerCase())
+                              )
+                              .map((status) => (
+                                <li
+                                  key={status}
+                                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                                  onClick={() => handleStatusSelect(ticket._id, status, ticket.assignedTo?._id)}
+                                >
+                                  {status}
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (

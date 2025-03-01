@@ -63,7 +63,7 @@ export const getTickets = async (req,res) =>{
 
 export const updateTicket = async (req, res) => {
     const { ticketId } = req.params;
-    const { assignedTo } = req.body;
+    const { assignedTo, status } = req.body;
 
     if (!assignedTo) {
         return res.status(400).json({ message: "Assigned user is required" });
@@ -88,11 +88,12 @@ export const updateTicket = async (req, res) => {
 
         // Assign the ticket
         ticket.assignedTo = assignedTo;
+        ticket.status = status;
         ticket.supervisorId = req.userId;
 
         await ticket.save();
 
-        res.status(200).json({ message: "Ticket assigned successfully", ticket });
+        res.status(200).json({ message: "Ticket updated successfully", ticket });
     } catch (error) {
         console.error("assignTicket error:", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -146,9 +147,9 @@ export const updateTicketstatus = async (req,res) =>{
 
 export const getAllTickets = async (req,res) =>{
     try {
-        const tickets = await Incident.find().populate("createdBy","firstName email")
-        .populate("assignedTo","firstName email")
-        .populate("supervisorId","firstName email")
+        const tickets = await Incident.find().populate("createdBy","firstName lastName email")
+        .populate("assignedTo","firstName lastName email")
+        .populate("supervisorId","firstName lastName email")
         .populate("region","name")
         .populate("group","name");
         res.status(200).json({tickets});

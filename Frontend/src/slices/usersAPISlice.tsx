@@ -64,10 +64,13 @@ export const usersAPISlice = apiSlice.injectEndpoints({
             }),
         }),
         updateTicket: builder.mutation({
-            query: ({ ticketId, assignedTo }) => ({
+            query: ({ ticketId, assignedTo, status}) => ({
                 url: `${USERS_URL}/update-ticket/${ticketId}`,
                 method: "PUT",
-                body: { assignedTo },
+                body:{
+                    ...(assignedTo ? { assignedTo } : {}), 
+                    ...(status ? { status } : {}) 
+                }     
             }),
         }),
         

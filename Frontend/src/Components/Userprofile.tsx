@@ -37,17 +37,17 @@ const UserProfile = () => {
   useEffect(() => {
     if (userInfo) {
       setPersonalInfo({
-        firstName: userInfo.user.firstName || '',
-        lastName: userInfo.user.lastName || '',
-        email: userInfo.user.email || '',
-        phoneNumber: userInfo.user.phoneNumber || '',
-        bio: userInfo.user.bio || '',
+        firstName: userInfo.user?.firstName || '',
+        lastName: userInfo.user?.lastName || '',
+        email: userInfo.user?.email || '',
+        phoneNumber: userInfo.user?.phoneNumber || '',
+        bio: userInfo.user?.bio || '',
       });
 
       setAddressInfo({
-        country: userInfo.user.country || '',
-        city: userInfo.user.city || '',
-        postalCode: userInfo.user.postalCode || '',
+        country: userInfo.user?.country || '',
+        city: userInfo.user?.city || '',
+        postalCode: userInfo.user?.postalCode || '',
       });
     }
   }, [userInfo]);
