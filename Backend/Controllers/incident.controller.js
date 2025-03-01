@@ -61,38 +61,44 @@ export const getTickets = async (req,res) =>{
 //Information Technology Trainee Indsafri logo
 //Indsafri
 
-export const updateTicket = async (req,res) =>{
+export const updateTicket = async (req, res) => {
+    const { ticketId } = req.params;
+    const { assignedTo } = req.body;
 
-    const {incidentID} = req.params;
-    const {assignedTo} = req.body;
+    if (!assignedTo) {
+        return res.status(400).json({ message: "Assigned user is required" });
+    }
 
-    if(!assignedTo){
-        return res.status(400).json({message:"All fields are required"});
-    }
-    if(!incidentID){
-        return res.status(400).json({message:"Incident ID is required"});
-    }
     try {
-        if(req.role === "Technician" ){
-            return res.status(403).json({message:"Permission Denied"});
-        }
-        const ticket = await Incident.findById(incidentID);
-        if(!ticket){
-            return res.status(404).json({message:"Ticket not found"});
+        // Ensure role and userId are available (assuming authentication middleware sets them)
+        console.log(req.role, req.userId);
+        if (!req.userId) {
+            return res.status(401).json({ message: "Unauthorized" });
         }
 
+        // Restrict Technicians from assigning tickets
+        // if (req.role === "Technician") {
+        //     return res.status(403).json({ message: "Permission Denied" });
+        // }
+
+        const ticket = await Incident.findById(ticketId);
+        if (!ticket) {
+            return res.status(404).json({ message: "Ticket not found" });
+        }
+
+        // Assign the ticket
         ticket.assignedTo = assignedTo;
         ticket.supervisorId = req.userId;
 
         await ticket.save();
 
-        res.status(200).json({message:"Ticket assigned",ticket});
-
+        res.status(200).json({ message: "Ticket assigned successfully", ticket });
     } catch (error) {
-        console.log("assignticket error",error);
-        res.status(500).json({message:error.message});
+        console.error("assignTicket error:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
+
 
 export const updateTicketstatus = async (req,res) =>{
 
@@ -140,9 +146,9 @@ export const updateTicketstatus = async (req,res) =>{
 
 export const getAllTickets = async (req,res) =>{
     try {
-        const tickets = await Incident.find().populate("createdBy","name email")
-        .populate("assignedTo","name email")
-        .populate("supervisorId","name email")
+        const tickets = await Incident.find().populate("createdBy","firstName email")
+        .populate("assignedTo","firstName email")
+        .populate("supervisorId","firstName email")
         .populate("region","name")
         .populate("group","name");
         res.status(200).json({tickets});

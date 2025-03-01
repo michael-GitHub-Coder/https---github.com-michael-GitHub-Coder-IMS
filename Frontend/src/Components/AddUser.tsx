@@ -14,6 +14,7 @@ const AddUser = () => {
    const [phoneNumber,setphoneNumber] = useState<string>("");
    const [bio,setBio] = useState<string>("");
    const [country,setCountry] = useState<string>("");
+   const [city,setCity] = useState<string>("");
    const [postalCode,setPostalCode] = useState<string>("");
 
    const {userInfo} = useSelector((state: any)=>state.auth);
@@ -34,10 +35,18 @@ const AddUser = () => {
         e.preventDefault();
 
         try {
-            const res = await addUser({firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password}).unwrap();
+            const res = await addUser({firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city}).unwrap();
             dispatch(setCredentials({...res}));
             // navigate("/dashboard");
-
+            setfirstName("");
+            setlastName("");
+            setEmail("");
+            setRole("");
+            setphoneNumber("");
+            setBio("");
+            setCountry("");
+            setCity("");
+            setPostalCode("");
             console.log(res);
         } catch (error) {
             console.log(error)
@@ -120,6 +129,14 @@ const AddUser = () => {
                 required
                 />
             </div>
+            <input 
+                type="text" 
+                placeholder="City" 
+                value={city}
+                onChange={(e)=>setCity(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" 
+                required
+            />
             <input 
                 type="text" 
                 placeholder="Postal Code" 

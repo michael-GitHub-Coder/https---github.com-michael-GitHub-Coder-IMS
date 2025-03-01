@@ -29,7 +29,8 @@ router.post("/Add-Ticket",verifyToken,addTicket);
 router.get("/Ticket",verifyToken,addTicket); 
 router.get("/Assign/:incidentID",verifyToken,updateTicket); 
 router.put("/updateStatus/:id",verifyToken,updateTicketstatus); 
-router.get("/All-Tickets",getAllTickets);
+router.get("/All-Tickets",verifyToken,getAllTickets);
+router.put("/update-ticket/:ticketId",verifyToken,updateTicket);
 
 router.get("/Count-status",verifyToken,getIncidentByStatus);
 

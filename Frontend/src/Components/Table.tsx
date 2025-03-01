@@ -1,64 +1,125 @@
-import  { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useGetTicketsQuery } from '../slices/usersAPISlice';
+import { useState, useEffect } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation } from "../slices/usersAPISlice";
 
 const Table = () => {
-  
   const { userInfo } = useSelector((state: any) => state.auth);
-  const { data: tickets, error, isLoading } = useGetTicketsQuery({});
+  const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
+  const { data: users } = useGetUsersQuery({});
+  const [updateTicket] = useUpdateTicketMutation();
 
   const filteredTickets = tickets?.tickets.filter((data: any) => data.status !== "Closed") || [];
 
-  
   const [currentPage, setCurrentPage] = useState(1);
   const ticketsPerPage = 13;
   const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);
-  const paginatedTickets = filteredTickets.slice((currentPage - 1) * ticketsPerPage,currentPage * ticketsPerPage);
+  const paginatedTickets = filteredTickets.slice((currentPage - 1) * ticketsPerPage, currentPage * ticketsPerPage);
 
+  const [dropdownTicketId, setDropdownTicketId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+
+  console.log(tickets)
+  useEffect(() => {
+    if (dropdownTicketId) setSearchQuery("");
+  }, [dropdownTicketId]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages || 1);
+    }
+  }, [totalPages]);
+
+  const handleAssignClick = (ticketId: string) => {
+    console.log("Clicked assign for ticket:", ticketId, "Current dropdown:", dropdownTicketId);
+    setDropdownTicketId(ticketId === dropdownTicketId ? null : ticketId);
+    setSearchQuery(""); 
+  };
+
+  
+  const handleUserSelect = async (ticketId: string, assignedTo: string) => {
+    console.log("Updating ticket with ID:", ticketId);
+    try {
+      console.log("this is the id ",ticketId)
+      await updateTicket({ ticketId: ticketId, assignedTo });
+      setDropdownTicketId(null);
+      refetch();
+    } catch (error) {
+      console.error("Error updating ticket:", error);
+    }
+  };
+
+  console.log(tickets)
   return (
     <div className="ml-10 mr-17">
-      {isLoading && <p className="min-w-6xl w-auto text-center">Loading tickets...</p>}
-      {error && <p className="text-red-500 min-w-6xl w-auto text-center">Error fetching tickets</p>}
+      {isLoading && <p className="text-center">Loading tickets...</p>}
+      {error && <p className="text-red-500 text-center">Error fetching tickets</p>}
 
       {!isLoading && !error && tickets && (
         <>
           <table className="table-auto min-w-6xl w-auto border border-gray-300">
-            <thead className="rounded-md bg-indigo-500 text-white">
+            <thead className="bg-indigo-500 text-white">
               <tr>
-                {['Ticket ID', 'Priority', 'Ticket Group', 'Assigned by', 'Assigned to', 'Status'].map((heading) => (
-                  <th key={heading} className="py-3 px-4 relative text-left">
-                    {heading}
-                    <div className="w-0 h-0 border-l-10 border-r-10 border-t-10 border-l-transparent border-r-transparent border-t-gray-400 absolute top-5 right-5"></div>
-                  </th>
+                {["Ticket ID", "Priority", "Ticket Group", "Assigned by", "Assigned to", "Status"].map((heading) => (
+                  <th key={heading} className="py-3 px-4 text-left">{heading}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="border border-gray-300">
+            <tbody>
               {paginatedTickets.length > 0 ? (
                 paginatedTickets.map((ticket: any) => (
                   <tr key={ticket._id} className="border border-gray-300 px-4 py-2">
                     <td className="py-2 px-4">{ticket._id}</td>
                     <td className="py-2 px-4">{ticket.priority}</td>
                     <td className="py-2 px-4">{ticket.ticketGroup}</td>
-                    <td className="py-2 px-4">{ticket.assignedBy}</td>
-                    <td className="py-2 px-4">{ticket.assignedTo}</td>
+                    <td className="py-2 px-4">{ticket.supervisorId?.firstName}</td>
+                    <td className="py-2 px-4 relative">
+                      <div onClick={() => handleAssignClick(ticket._id)} className="cursor-pointer">
+                       {/* {"Unassigned"}  */}
+                       {ticket.assignedTo?.firstName || "Unassigned"} 
+                      </div>
+                      {dropdownTicketId === ticket._id && (
+                        <div className="absolute bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
+                          <input
+                            type="text"
+                            className="w-full p-2 border-b"
+                            placeholder="Search user..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                          />
+                          <ul className="max-h-40 overflow-auto">
+                            {users.users?.filter((user: any) =>
+                                `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+                              )
+                              .map((user: any) => (
+                                <li
+                                  key={user._id}
+                                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                                  onClick={() => handleUserSelect(ticket._id, user._id)}
+                                >
+                                  {user.firstName} {user.lastName}
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+                    </td>
                     <td className="py-2 px-4">{ticket.status}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-4">No tickets available</td>
+                  <td colSpan={6} className="text-center py-4">No tickets available</td>
                 </tr>
               )}
             </tbody>
           </table>
 
-          {/* check number of lines */}
-          <div className={`${totalPages <= 13 ? "hidden" : "flex justify-center mt-4"}`}>
+          <div className={`${totalPages <= 1 ? "hidden" : "flex justify-center mt-4"}`}>
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className={`mx-2 px-3 py-2  ${currentPage === 1 ? "bg-gray-200 rounded-full cursor-pointer" : "bg-indigo-500 text-white hover:bg-indigo-600 rounded-full cursor-pointer"}`}
+              className={`mx-2 px-3 py-2 ${currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-600"}`}
             >
               Previous
             </button>
@@ -66,7 +127,7 @@ const Table = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className={`mx-2 px-3 py-2  ${currentPage === totalPages ? "bg-gray-200 rounded-full cursor-pointer" : "bg-indigo-500 text-white hover:bg-indigo-600 rounded-full cursor-pointer"}`}
+              className={`mx-2 px-3 py-2 ${currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-600"}`}
             >
               Next
             </button>

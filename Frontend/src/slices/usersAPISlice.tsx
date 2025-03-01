@@ -49,8 +49,29 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 method: "PUT",
                 body: data
            })
-        })
+        }),
+        addticket: builder.mutation({
+            query: (data)=>({
+                url: `${USERS_URL}/Add-Ticket`,
+                method: "POST",
+                body: data
+            })
+        }),
+        getUsers: builder.query({
+            query: () => ({
+                url: `${USERS_URL}/All-Users`,
+                method: "GET",
+            }),
+        }),
+        updateTicket: builder.mutation({
+            query: ({ ticketId, assignedTo }) => ({
+                url: `${USERS_URL}/update-ticket/${ticketId}`,
+                method: "PUT",
+                body: { assignedTo },
+            }),
+        }),
+        
     })
 })
 
-export const { useLoginMutation,useLogoutMutation,useGetTicketsQuery,useAddUserMutation,useUpdateProfileMutation } = usersAPISlice;
+export const { useGetUsersQuery, useUpdateTicketMutation, useLoginMutation,useRegisterMutation,useLogoutMutation,useGetTicketsQuery,useAddUserMutation,useUpdateProfileMutation,useAddticketMutation } = usersAPISlice;
