@@ -8,7 +8,10 @@ const Table = () => {
   const { data: users } = useGetUsersQuery({});
   const [updateTicket] = useUpdateTicketMutation();
 
-  const filteredTickets = tickets?.tickets.filter((data: any) => data.status !== "Closed") || [];
+  // Filter tickets that are not closed and sort by creation date (most recent first)
+  const filteredTickets = tickets?.tickets
+    .filter((data: any) => data.status !== "Closed")
+    .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) || [];
 
   const [currentPage, setCurrentPage] = useState(1);
   const ticketsPerPage = 13;
@@ -29,6 +32,16 @@ const Table = () => {
       setCurrentPage(totalPages || 1);
     }
   }, [totalPages]);
+
+  // Set interval for auto-refresh every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 10000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(interval);
+  }, [refetch]);
 
   const handleAssignClick = (ticketId: string) => {
     setDropdownTicketId(ticketId === dropdownTicketId ? null : ticketId);
@@ -67,6 +80,8 @@ const Table = () => {
     }
   };
 
+  console.log(tickets);
+  
   return (
     <div className="ml-10 mr-17">
       {isLoading && <p className="text-center min-w-6xl">Loading tickets...</p>}
@@ -92,7 +107,7 @@ const Table = () => {
                     <td className="py-2 px-4">{ticket.supervisorId?.firstName}</td>
                     <td className="py-2 px-4 relative">
                       <div onClick={() => handleAssignClick(ticket._id)} className="cursor-pointer">
-                      {ticket.assignedTo? `${ticket.assignedTo.firstName ?? ""} ${ticket.assignedTo.lastName ?? ""}`.trim(): "Unassigned"}
+                        {ticket.assignedTo ? `${ticket.assignedTo.firstName ?? ""} ${ticket.assignedTo.lastName ?? ""}`.trim() : "Unassigned"}
                       </div>
                       {dropdownTicketId === ticket._id && (
                         <div className="absolute bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
