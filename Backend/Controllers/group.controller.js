@@ -2,9 +2,13 @@ import {Group} from '../Models/group.model.js';
 import {User} from '../Models/User.model.js';
 import {Region} from '../Models/region.model.js';
 
+
 export const addGroup = async (req, res) =>{
     
     const {name,regionId,supervisorId} = req.body;
+    if(!regionId || !supervisorId){
+        return res.status(400).json({message:"All fields are required"});
+    }
     if(!name){
         return res.status(400).json({message:"All fields are required"});
     }
@@ -40,9 +44,12 @@ export const addToGroup = async (req, res) =>{
     const {regionId, supervisorId} = req.body;
     const {id} = req.params;
 
-    if(!regionId || !supervisorId){
-        return res.status(400).json({message:"All fields are required"});
+    
+    if(req.role !== "Admin"){
+        return res.status(403).json({message:"Permission Denied"});
     }
+
+   
 
     try {
         
@@ -82,4 +89,19 @@ export const addToGroup = async (req, res) =>{
         res.status(500).json({message:error.message})
     }
    
+}
+
+
+export const getGroups = async (req,res) =>{
+
+
+    try {
+        const group = await Group.find().populate("createdBy","firstName lastName email")
+        .populate("supervisorId","firstName lastName email")
+        .populate("regionId","name");
+        res.status(200).json({group});
+    } catch (error) {
+        console.log("getAGroups error",error);
+        res.status(500).json({message:error.message});
+    }
 }

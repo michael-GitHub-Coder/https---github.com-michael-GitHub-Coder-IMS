@@ -58,8 +58,7 @@ export const getTickets = async (req,res) =>{
         res.status(500).json({message:error.message});
     }
 }
-//Information Technology Trainee Indsafri logo
-//Indsafri
+
 
 export const updateTicket = async (req, res) => {
     const { ticketId } = req.params;
