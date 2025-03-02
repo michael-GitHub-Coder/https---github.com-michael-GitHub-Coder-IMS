@@ -22,6 +22,10 @@ const incidentSchema = new mongoose.Schema({
     type:Date,
     default:Date.now
   },
+  closedAt:{
+    type:Date,
+    default:null
+  },
   createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User", 

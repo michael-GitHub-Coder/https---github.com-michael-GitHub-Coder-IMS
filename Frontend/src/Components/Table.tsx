@@ -54,7 +54,11 @@ const Table = () => {
     console.log("Updating ticket with ID:", ticketId, "Status:", status, "Assigned to:", assignedToId);
   
     try {
-      const response = await updateTicket({ ticketId, status, assignedTo: assignedToId });
+      const response = await updateTicket({
+        ticketId, 
+        status,
+        assignedTo: assignedToId
+     });
       console.log("Response:", response);
       setDropdownStatusTicketId(null);
       refetch();

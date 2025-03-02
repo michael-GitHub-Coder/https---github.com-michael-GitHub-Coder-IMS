@@ -19,13 +19,31 @@ const Dashboard = () => {
   const [ClosedTickets,setClosedTickets] = useState(0);
   const [totTickets,settotTickets] = useState(0);
   
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Start of today
+
+  const ticketsToday = tickets?.tickets?.filter((ticket: any) => 
+    new Date(ticket.createdAt) >= today
+  ) || [];
+
+ 
+
+ 
+
   useEffect(() => {
     if (tickets) {
       
       settotTickets(tickets.tickets.length);
 
-      const filteredTicketsClosed = tickets.tickets.filter((data: any) => data.status !== "Closed");
-      setClosedTickets(tickets.tickets.length - filteredTicketsClosed.length);
+      // const filteredTicketsClosed = tickets.tickets.filter((data: any) => data.status !== "Closed");
+      // setClosedTickets(tickets.tickets.length - filteredTicketsClosed.length);
+      const closedTicketsToday = tickets?.tickets?.filter((ticket: any) => 
+        ticket.status === "Closed" && new Date(ticket.closedAt) >= today
+      ) || [];
+
+      const closedPercentageToday = ticketsToday.length > 0 
+      ? Math.round((closedTicketsToday.length / ticketsToday.length) * 100) 
+      : 0;
 
       const filteredTicketsCritical = tickets.tickets.filter((data: any) => data.priority !== "Critical");
       setNoOFCritical(tickets.tickets.length - filteredTicketsCritical.length);

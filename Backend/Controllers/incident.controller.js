@@ -89,6 +89,7 @@ export const updateTicket = async (req, res) => {
         ticket.assignedTo = assignedTo;
         ticket.status = status;
         ticket.supervisorId = req.userId;
+        ticket.closedAt = new Date();
 
         await ticket.save();
 
