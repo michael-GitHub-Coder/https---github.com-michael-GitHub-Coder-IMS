@@ -63,6 +63,12 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 method: "GET",
             }),
         }),
+        getRegions: builder.query({
+            query: () => ({
+                url: `${USERS_URL}/All-Regions`,
+                method: "GET",
+            }),
+        }),
         updateTicket: builder.mutation({
             query: ({ ticketId, assignedTo, status}) => ({
                 url: `${USERS_URL}/update-ticket/${ticketId}`,
@@ -73,8 +79,14 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 }     
             }),
         }),
-        
+        addGroup: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/Add-Group`,
+                method: "POST",
+                body: data
+            })
+        }),
     })
 })
 
-export const { useGetUsersQuery, useUpdateTicketMutation, useLoginMutation,useRegisterMutation,useLogoutMutation,useGetTicketsQuery,useAddUserMutation,useUpdateProfileMutation,useAddticketMutation } = usersAPISlice;
+export const {useAddGroupMutation,useGetRegionsQuery, useGetUsersQuery, useUpdateTicketMutation, useLoginMutation,useRegisterMutation,useLogoutMutation,useGetTicketsQuery,useAddUserMutation,useUpdateProfileMutation,useAddticketMutation } = usersAPISlice;

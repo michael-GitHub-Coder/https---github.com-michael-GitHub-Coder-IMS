@@ -56,7 +56,7 @@ const Dashboard = () => {
         <Sidebar isOpen={sidebarOpen} />
         <button
           className="text-white rounded-r-full cursor-pointer bg-indigo-500 pr-3 pl-2 py-4 absolute top-7 transition-all duration-300 "
-          style={{ left: sidebarOpen ? "10rem" : "4.5rem" }} 
+          style={{ left: sidebarOpen ? "10rem" : "3.5rem" }} 
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           {sidebarOpen ? <FaArrowLeft size={24} /> : <FaArrowRight size={24} />}
@@ -65,13 +65,13 @@ const Dashboard = () => {
       
       <div className="flex flex-col">   
         <div className={`flex justify-end ${sidebarOpen ? "-mr-20" : "mr-5"}  mt-5`}>
-          <button onClick={handleUserProfile} className="bg-indigo-500 rounded-full px-3 py-2 text-white cursor-pointer">User Profile</button>
+          <button onClick={handleUserProfile} className="bg-indigo-500 rounded-full px-3 py-2 text-white cursor-pointer absolute right-10">User Profile</button>
         </div>
         <div className="flex">
-          <div className="mt-5 min-w-6xl">
+          <div className="mt-15 min-w-6xl">
             <Outlet />
           </div>
-          <div className={`${sidebarOpen ? "hidden" : "block"} bg-gray-200 h-[calc(100vh-115px)] justify-end mt-5 lg:w-55 md:w-full md:-ml-10  md:mr-5 rounded-md text-white`}>
+          <div className={`${sidebarOpen ? "hidden" : "block"} bg-gray-200 h-[calc(100vh-115px)] absolute right-5 top-15 justify-end mt-5 lg:w-55 md:w-full md:-ml-10  md:mr-5 rounded-md text-white`}>
             <div className="flex flex-col justify-center bg-indigo-500 rounded-full text-center py-14 m-5 ">
                   <p className="font-semibold text-2xl">{t}%</p>
                   <p>Tickets closed</p>

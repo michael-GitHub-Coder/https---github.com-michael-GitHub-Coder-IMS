@@ -13,7 +13,8 @@ export const addGroup = async (req, res) =>{
         const group = new Group({
             name,
             regionId,
-            supervisorId
+            supervisorId,
+            createdBy:req.userId,
         });
         await group.save();
         res.status(201).json({message:"Group created successfully ",group});

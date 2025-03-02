@@ -65,13 +65,13 @@ const Table = () => {
 
   return (
     <div className="ml-10 mr-17">
-      {isLoading && <p className="text-center">Loading tickets...</p>}
+      {isLoading && <p className="text-center min-w-6xl">Loading tickets...</p>}
       {error && <p className="text-red-500 text-center">Error fetching tickets</p>}
 
       {!isLoading && !error && tickets && (
-        <>
-          <table className="table-auto min-w-6xl w-auto border border-gray-300">
-            <thead className="bg-indigo-500 text-white">
+        <div className="overflow-hidden rounded-tl-md rounded-tr-md">
+          <table className="table-auto min-w-6xl w-auto border border-gray-300 ">
+            <thead className="bg-indigo-500 border-2 border-indigo-500 rounded-tl-md rounded-tr-md text-white">
               <tr>
                 {["Ticket ID", "Priority", "Ticket Group", "Assigned by", "Assigned to", "Status"].map((heading) => (
                   <th key={heading} className="py-3 px-4 text-left">{heading}</th>
@@ -173,7 +173,7 @@ const Table = () => {
               Next
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

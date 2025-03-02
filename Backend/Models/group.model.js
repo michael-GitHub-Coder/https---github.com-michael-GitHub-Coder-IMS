@@ -16,6 +16,11 @@ const groupSchema = new mongoose.Schema({
     ref: "User", 
     required: false 
   },
+  createdBy: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "User", 
+    required: false 
+  }
 });
 
 export const Group = mongoose.model("Group", groupSchema);
