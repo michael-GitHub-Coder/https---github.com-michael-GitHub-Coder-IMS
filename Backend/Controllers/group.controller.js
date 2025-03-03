@@ -94,7 +94,6 @@ export const addToGroup = async (req, res) =>{
 
 export const getGroups = async (req,res) =>{
 
-
     try {
         const group = await Group.find().populate("createdBy","firstName lastName email")
         .populate("supervisorId","firstName lastName email")

@@ -45,6 +45,11 @@ const userschema = new mongoose.Schema({
         enum: ["Admin", "Supervisor", "Technician"],
         required:true
     },
+    group: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Group", 
+        required: false 
+    },
     lastLogin:{
         type:Date,
         default:Date.now

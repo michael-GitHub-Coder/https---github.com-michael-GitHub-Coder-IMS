@@ -2,19 +2,20 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation, useGetMeQuery } from "../slices/usersAPISlice";
 
-const Table = () => {
+const Table3 = () => {
+
   const { data: me } = useGetMeQuery({});
   let logedInUser = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
- 
 
   const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
   const { data: users } = useGetUsersQuery({});
   const [updateTicket] = useUpdateTicketMutation();
 
-  // Filter tickets that are not closed and sort by creation date (most recent first)
+  
   const filteredTickets = tickets?.tickets
-    .filter((data: any) => data.status !== "Closed")
+    .filter((ticket: any) => ticket.status !== "Closed")
+    .filter((ticket: any) => me?.user?.role === "Supervisor") 
     .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) || [];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,8 +82,6 @@ const Table = () => {
 
       {!isLoading && !error && tickets && (
         <div className=" rounded-tl-md rounded-tr-md">
-          {/* Conditional Rendering Based on User Role */}
-         
           <table className="table-auto min-w-6xl w-auto border border-gray-300 ">
             <thead className="bg-indigo-500 border-2 border-indigo-500 rounded-tl-md rounded-tr-md text-white">
               <tr>
@@ -104,7 +103,7 @@ const Table = () => {
                         {ticket.assignedTo ? `${ticket.assignedTo.firstName ?? ""} ${ticket.assignedTo.lastName ?? ""}`.trim() : "Unassigned"}
                       </div>
                       {dropdownTicketId === ticket._id && (
-                        <div className="absolute top-0 bg-white border border-gray-300 shadow-lg rounded  w-full z-10">
+                        <div className="absolute top-full  bg-white border border-gray-300 shadow-lg rounded w-full z-20">
                           <input
                             type="text"
                             className="w-full p-2 border-b"
@@ -134,7 +133,7 @@ const Table = () => {
                         {ticket.status}
                       </div>
                       {dropdownStatusTicketId === ticket._id && (
-                        <div className="absolute bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
+                        <div className="absolute -left-3 overflow-visible  bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
                           <input
                             type="text"
                             className="w-full p-2 border-b"
@@ -192,4 +191,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default Table3;

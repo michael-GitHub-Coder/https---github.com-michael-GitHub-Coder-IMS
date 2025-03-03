@@ -72,6 +72,7 @@ export const login = async (req, res) => {
 				...user._doc,
 				password: undefined,
 			},
+           
 		});
 	} catch (error) {
       
@@ -182,7 +183,8 @@ export const resetPassord = async (req,res) => {
 export const checkAuth = async (req,res) =>{
 
     try {
-        const user = await User.findById(req.userId).select("-password");
+        const user = await User.findById(req.userId).select("-password")
+        .populate("group","name");
         if(!user){
             return res.status(400).json({success:false,message:"User not found"});
         }
@@ -198,9 +200,9 @@ export const checkAuth = async (req,res) =>{
 export const addMembers = async (req,res) =>{
    
 
-    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city} = req.body;
+    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city,group} = req.body;
 
-    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city){
+    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city || !group){
         return res.status(400).json({message:"All fields are required"});
     }
 
@@ -225,7 +227,7 @@ export const addMembers = async (req,res) =>{
 		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newUser = new User({
-			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,
+			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,group,
 			password:hashedPassword,
 			verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
