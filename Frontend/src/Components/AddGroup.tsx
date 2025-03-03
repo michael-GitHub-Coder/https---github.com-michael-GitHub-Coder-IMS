@@ -20,6 +20,8 @@ const AddGroup = () => {
   const { data: regionsData } = useGetRegionsQuery({});
   const { data: groupsData } = useGetGroupsQuery({});
   
+  console.log("region data", regionsData);
+
   const [addGroup] = useAddGroupMutation();
   const [updateGroup] = useUpdateGroupMutation();
 
@@ -92,7 +94,7 @@ const AddGroup = () => {
     setSupervisor("");
   };
 
-  console.log("regions ", regionsData);
+
   return (
     <div className="ml-10 mr-17">
       <div className="max-w-6xl mx-auto -mt-15">
@@ -182,8 +184,7 @@ const AddGroup = () => {
                 <select value={region} onChange={(e) => setRegion(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" required>
                   {regionsData?.regions?.map((region: any) => (
                     <option key={region._id} value={region._id}>
-                        {region.name}
-                    </option>
+                        {region.name}                    </option>
                   ))}
                 </select>
                 <div className="flex justify-end space-x-4">

@@ -34,6 +34,8 @@ router.put("/update-ticket/:ticketId",verifyToken,updateTicket);
 
 router.get("/Count-status",verifyToken,getIncidentByStatus);
 
+
+router.get("/getTs",verifyToken,getAllTickets);
 //Regions
 
 router.post("/Add-Region",verifyToken,addRegion);

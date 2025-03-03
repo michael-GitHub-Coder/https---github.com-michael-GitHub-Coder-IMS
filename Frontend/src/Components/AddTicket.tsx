@@ -18,8 +18,8 @@ const AddTicket = () => {
   const { data: regionsData, isLoading: regionsLoading, error: regionsError } = useGetRegionsQuery({});
   
 
-  console.log("group data ",groupsData);
-  console.log("region data",regionsData);
+
+
 
 
   const navigate = useNavigate();
@@ -42,7 +42,13 @@ const AddTicket = () => {
   const handleTicketSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await addticket({ title, description, priority, status, group, region }).unwrap();
+      const res = await addticket({ 
+        title, 
+        description, 
+        priority, 
+        status, 
+        group, 
+        region }).unwrap();
       dispatch(setCredentials({ ...res }));
       //navigate("/dashboard");
       alert("Ticket created successfully");
@@ -50,6 +56,8 @@ const AddTicket = () => {
       console.log(error);
     }
   };
+  console.log("1 region ",region);
+  console.log("2 group ",group);
 
   return (
     <div>

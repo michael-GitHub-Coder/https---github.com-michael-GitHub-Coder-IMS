@@ -33,15 +33,15 @@ const Table = () => {
     }
   }, [totalPages]);
 
-  // Set interval for auto-refresh every 2 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
-    }, 10000);
 
-    // Clear interval on component unmount
-    return () => clearInterval(interval);
-  }, [refetch]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     refetch();
+  //   }, 10000);
+
+  //   // Clear interval on component unmount
+  //   return () => clearInterval(interval);
+  // }, [refetch]);
 
   const handleAssignClick = (ticketId: string) => {
     setDropdownTicketId(ticketId === dropdownTicketId ? null : ticketId);
@@ -80,7 +80,7 @@ const Table = () => {
     }
   };
 
-  console.log(tickets);
+  
   
   return (
     <div className="ml-10 mr-17">
@@ -103,7 +103,7 @@ const Table = () => {
                   <tr key={ticket._id} className="border border-gray-300 px-4 py-2">
                     <td className="py-2 px-4">{ticket._id}</td>
                     <td className="py-2 px-4">{ticket.priority}</td>
-                    <td className="py-2 px-4">{ticket.ticketGroup}</td>
+                    <td className="py-2 px-4">{ticket.group?.name}</td>
                     <td className="py-2 px-4">{ticket.supervisorId?.firstName}</td>
                     <td className="py-2 px-4 relative">
                       <div onClick={() => handleAssignClick(ticket._id)} className="cursor-pointer">

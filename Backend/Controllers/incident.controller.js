@@ -3,7 +3,7 @@ import { User } from "../Models/User.model.js";
 
 export const addTicket = async (req, res) =>{
    
-    const {title,description,priority,status} = req.body;
+    const {title,description,priority,status,region,group} = req.body;
     if(!title || !description || !priority || !status){
         return res.status(400).json({message:"All fields are required"});
     }
@@ -21,7 +21,9 @@ export const addTicket = async (req, res) =>{
             description,
             priority,
             status,
-            createdBy:req.userId
+            createdBy:req.userId,
+            region,
+            group
         });
         await ticket.save();
         res.status(201).json({message:"Ticket created successfully ",ticket});
@@ -40,9 +42,9 @@ export const getTickets = async (req,res) =>{
         let tickets;
         if(req.role === "Admin"){
             tickets = await Incident.find()
-            .populate("createdBy","name email")
-            .populate("assignedTo","name email")
-            .populate("supervisorId","name email")
+            .populate("createdBy","firstName email")
+            .populate("assignedTo","firstName email")
+            .populate("supervisorId","firstName email")
             .populate("region","name")
             .populate("group","name");
         }else if(req.role === "Technician"){

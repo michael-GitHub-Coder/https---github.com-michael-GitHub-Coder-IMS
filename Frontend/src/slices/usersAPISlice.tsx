@@ -33,7 +33,7 @@ export const usersAPISlice = apiSlice.injectEndpoints({
         }),
         getMe: builder.query({
             query:()=>({
-                url: `${USERS_URL}/All-Tickets`,
+                url: `${USERS_URL}/check-auth`,
                 method:"GET"
             })
         }),
@@ -115,4 +115,5 @@ export const {
     useGetTicketsQuery,
     useAddUserMutation,
     useUpdateProfileMutation,
+    useGetMeQuery,
     useAddticketMutation } = usersAPISlice;
