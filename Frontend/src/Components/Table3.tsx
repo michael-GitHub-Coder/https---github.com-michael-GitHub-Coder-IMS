@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation, useGetMeQuery } from "../slices/usersAPISlice";
+import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation, useGetMeQuery,useGetGroupsQuery } from "../slices/usersAPISlice";
 
 const Table3 = () => {
 
@@ -10,8 +10,17 @@ const Table3 = () => {
 
   const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
   const { data: users } = useGetUsersQuery({});
+  const { data: groupData } = useGetGroupsQuery({});
   const [updateTicket] = useUpdateTicketMutation();
 
+   //console.log(groupData.group.map((name: any)) => name?.supervisorId === me?.user?._id ? name?.name : null);
+   console.log("me 2", groupData.group);
+   console.log(
+    "groups data",
+    groupData.map((name: any) => 
+      name?.group?.supervisorId === me?.user?._id ? name?.group?.name : null
+    )
+  );
   
   const filteredTickets = tickets?.tickets
     .filter((ticket: any) => ticket.status !== "Closed")
