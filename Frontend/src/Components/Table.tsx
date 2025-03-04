@@ -7,7 +7,7 @@ const Table = () => {
   let logedInUser = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
  
-
+  const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
   const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
   const { data: users } = useGetUsersQuery({});
   const [updateTicket] = useUpdateTicketMutation();
@@ -26,6 +26,15 @@ const Table = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [dropdownStatusTicketId, setDropdownStatusTicketId] = useState<string | null>(null);
   const [statusSearchQuery, setStatusSearchQuery] = useState("");
+
+  
+  const handleViewClick = (ticket: any) => {
+    setSelectedTicket(ticket);  
+  };
+
+  const closeModal = () => {
+    setSelectedTicket(null); 
+  };
 
   useEffect(() => {
     if (dropdownTicketId) setSearchQuery("");
@@ -86,7 +95,7 @@ const Table = () => {
           <table className="table-auto min-w-6xl w-auto border border-gray-300 ">
             <thead className="bg-indigo-500 border-2 border-indigo-500 rounded-tl-md rounded-tr-md text-white">
               <tr>
-                {["Ticket ID", "Priority", "Ticket Group", "Assigned by", "Assigned to", "Status"].map((heading) => (
+                {["Ticket ID", "Priority", "Ticket Group", "Assigned by", "Assigned to", "Status", "Actions"].map((heading) => (
                   <th key={heading} className="py-3 px-4 text-left">{heading}</th>
                 ))}
               </tr>
@@ -159,6 +168,15 @@ const Table = () => {
                         </div>
                       )}
                     </td>
+
+                    <td className="py-2 px-4">
+                      <button
+                        onClick={() => handleViewClick(ticket)}  
+                        className="bg-indigo-500 text-white px-4 py-2 rounded cursor-pointer"
+                      >
+                        View
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -186,6 +204,30 @@ const Table = () => {
               Next
             </button>
           </div>
+
+          {selectedTicket && (
+            <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                <h2 className="text-xl font-bold mb-4">Ticket Details</h2>
+                <div className="flex justify-between border border-gray-300 px-2 py-3 rounded-md">
+                  <p><strong>Ticket ID:</strong> {selectedTicket._id}</p>
+                  <p><strong>Priority:</strong> {selectedTicket.priority}</p>
+                </div>
+                <div className="mt-1 flex justify-between border border-gray-300 px-2 py-3 rounded-md">
+                  <p><strong>Assigned to:</strong> {selectedTicket.assignedTo ? `${selectedTicket.assignedTo.firstName} ${selectedTicket.assignedTo.lastName}` : "Not assigned"}</p>
+                  <p><strong>Status:</strong> {selectedTicket.status}</p>
+                </div>
+                <div className="mt-1  space-y-5 border border-gray-300 px-2 py-3 rounded-md">
+                  <p><strong>Title:</strong> {selectedTicket.title}</p>
+                  <p><strong>Description:</strong> {selectedTicket.description}</p>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <button onClick={closeModal} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 cursor-pointer">Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       )}
     </div>

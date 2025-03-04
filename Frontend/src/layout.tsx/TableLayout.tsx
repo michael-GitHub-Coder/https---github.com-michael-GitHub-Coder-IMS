@@ -7,7 +7,7 @@ import Table2 from '../Components/Table2';
 
 const TableLayout = () => {
   const { data: me } = useGetMeQuery({});
- console.log("me mee", me);
+
   return (
     <div>
       {me?.user?.role === "Admin" ? (
