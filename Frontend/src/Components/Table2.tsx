@@ -96,37 +96,8 @@ const Table2 = () => {
                     <td className="py-2 px-4">{ticket._id}</td>
                     <td className="py-2 px-4">{ticket.priority}</td>
                     <td className="py-2 px-4">{ticket.group?.name}</td>
-                    <td className="py-2 px-4">{ticket.supervisorId?.firstName}</td>
-                    <td className="py-2 px-4 relative">
-                      <div onClick={() => handleAssignClick(ticket._id)} className="cursor-pointer">
-                        {ticket.assignedTo ? `${ticket.assignedTo.firstName ?? ""} ${ticket.assignedTo.lastName ?? ""}`.trim() : "Unassigned"}
-                      </div>
-                      {dropdownTicketId === ticket._id && (
-                        <div className="absolute top-full  bg-white border border-gray-300 shadow-lg rounded w-full z-20">
-                          <input
-                            type="text"
-                            className="w-full p-2 border-b"
-                            placeholder="Search user..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                          />
-                          <ul className="max-h-40 overflow-auto ">
-                            {users.users?.filter((user: any) =>
-                                `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
-                              )
-                              .map((user: any) => (
-                                <li
-                                  key={user._id}
-                                  className="p-2 hover:bg-gray-200 cursor-pointer"
-                                  onClick={() => handleUserSelect(ticket._id, user._id)}
-                                >
-                                  {user.firstName} {user.lastName}
-                                </li>
-                              ))}
-                          </ul>
-                        </div>
-                      )}
-                    </td>
+                    <td className="py-2 px-4">{ticket.supervisorId?.firstName} {ticket.supervisorId?.lastName}</td>
+                    <td className="py-2 px-4">{ticket.assignedTo?.firstName} {ticket.assignedTo?.lastName}</td>
                     <td className="py-2 px-4 relative">
                       <div onClick={() => handleStatusChangeClick(ticket._id)} className="cursor-pointer">
                         {ticket.status}
