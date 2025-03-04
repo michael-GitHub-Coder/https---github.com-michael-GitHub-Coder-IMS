@@ -44,13 +44,7 @@ export const addToGroup = async (req, res) =>{
     const {regionId, supervisorId} = req.body;
     const {id} = req.params;
 
-    
-    if(req.role !== "Admin"){
-        return res.status(403).json({message:"Permission Denied"});
-    }
-
-   
-
+     console.log("addToGroup", req.body, req.params);
     try {
         
         const user = await User.findById(req.userId).select("-password");
@@ -76,7 +70,7 @@ export const addToGroup = async (req, res) =>{
             return res.status(404).json({message:"Supervisor not found"});
         }
 
-        group.name = group.name;
+        group.name = req.body.name;
         group.regionId = regionId;
         group.supervisorId = supervisorId;
 
@@ -98,7 +92,7 @@ export const getGroups = async (req,res) =>{
         const group = await Group.find().populate("createdBy","firstName lastName email")
         .populate("supervisorId","firstName lastName email")
         .populate("regionId","name");
-        
+
         res.status(200).json({group});
 
     } catch (error) {

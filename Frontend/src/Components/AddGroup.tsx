@@ -20,7 +20,6 @@ const AddGroup = () => {
   const { data: regionsData } = useGetRegionsQuery({});
   const { data: groupsData } = useGetGroupsQuery({});
   
-
   const [addGroup] = useAddGroupMutation();
   const [updateGroup] = useUpdateGroupMutation();
 
@@ -182,8 +181,13 @@ const AddGroup = () => {
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" required />
                 <select value={region} onChange={(e) => setRegion(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" required>
                   {regionsData?.regions?.map((region: any) => (
-                    <option key={region._id} value={region._id}>
-                        {region.name}                    </option>
+                    <option key={region._id} value={region._id}>{region.name}</option>
+                  ))}
+                </select>
+                <select value={supervisor} onChange={(e) => setSupervisor(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" required>
+                  <option value="" disabled>Select Supervisor</option>
+                  {usersData?.users?.map((user: any) => (
+                    <option key={user._id} value={user._id}>{user.firstName} {user.lastName}</option>
                   ))}
                 </select>
                 <div className="flex justify-end space-x-4">
