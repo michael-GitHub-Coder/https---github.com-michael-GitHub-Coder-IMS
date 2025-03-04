@@ -1,8 +1,8 @@
 import React from 'react';
 import { useGetMeQuery } from "../slices/usersAPISlice";
 import Table from '../Components/Table';
-import Table2 from '../Components/table2';
 import Table3 from '../Components/Table3';
+import Table2 from '../Components/Table2';
 
 
 const TableLayout = () => {

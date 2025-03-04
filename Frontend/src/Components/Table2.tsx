@@ -5,19 +5,18 @@ import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation, useGetMe
 const Table2 = () => {
 
   const { data: me } = useGetMeQuery({});
-  let logedInUser = JSON.parse(localStorage.getItem("userInfo") || "{}");
-
 
   const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
   const { data: users } = useGetUsersQuery({});
   const [updateTicket] = useUpdateTicketMutation();
 
-  
   const filteredTickets = tickets?.tickets
-    .filter((ticket: any) => ticket.status !== "Closed")
-    .filter((ticket: any) => me?.user?.role === "Technician" && ticket.group?.name === me?.user?.group?.name) 
+    .filter((ticket: any) => ticket.assignedTo._id === me?.user?._id) 
+    .filter((ticket: any) => me?.user?.role === "Technician" )
     .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) || [];
 
+  console.log(filteredTickets);
+     
   const [currentPage, setCurrentPage] = useState(1);
   const ticketsPerPage = 13;
   const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);

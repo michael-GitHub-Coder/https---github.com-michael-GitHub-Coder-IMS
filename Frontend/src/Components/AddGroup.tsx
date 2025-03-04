@@ -20,7 +20,6 @@ const AddGroup = () => {
   const { data: regionsData } = useGetRegionsQuery({});
   const { data: groupsData } = useGetGroupsQuery({});
   
-  console.log("region data", regionsData);
 
   const [addGroup] = useAddGroupMutation();
   const [updateGroup] = useUpdateGroupMutation();

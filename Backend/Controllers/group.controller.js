@@ -98,7 +98,9 @@ export const getGroups = async (req,res) =>{
         const group = await Group.find().populate("createdBy","firstName lastName email")
         .populate("supervisorId","firstName lastName email")
         .populate("regionId","name");
+        
         res.status(200).json({group});
+
     } catch (error) {
         console.log("getAGroups error",error);
         res.status(500).json({message:error.message});

@@ -6,26 +6,41 @@ const Table3 = () => {
 
   const { data: me } = useGetMeQuery({});
   let logedInUser = JSON.parse(localStorage.getItem("userInfo") || "{}");
-
+  const [groupList, setGroupList] = useState<any[]>([]);
 
   const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
   const { data: users } = useGetUsersQuery({});
   const { data: groupData } = useGetGroupsQuery({});
   const [updateTicket] = useUpdateTicketMutation();
 
-   //console.log(groupData.group.map((name: any)) => name?.supervisorId === me?.user?._id ? name?.name : null);
-   console.log("me 2", groupData.group);
-   console.log(
-    "groups data",
-    groupData.map((name: any) => 
-      name?.group?.supervisorId === me?.user?._id ? name?.group?.name : null
-    )
-  );
+ // console.log(groupData)
+ 
+
+  useEffect(() => {
+    if (groupData?.group) {
+      setGroupList(groupData.group);
+    }
+  }, [groupData]);
+
   
+  //const dataa = Array.isArray(groupList) ? groupList.filter((g) => g?.supervisorId?._id === me?.user?._id).map((g) => g?.name): [];
+  const dataa =groupList.filter((g) => g?.supervisorId?._id === me?.user?._id).map((g) => g?.name);
+  console.log("data ",dataa)
+
   const filteredTickets = tickets?.tickets
     .filter((ticket: any) => ticket.status !== "Closed")
     .filter((ticket: any) => me?.user?.role === "Supervisor") 
+    .filter((ticket: any) => dataa.includes(ticket.group?.name))
     .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) || [];
+
+ 
+
+    // const filteredTickets = tickets?.tickets
+    // .filter((ticket: any) => ticket.status !== "Closed")
+    // .filter((ticket: any) => me?.user?.role === "Supervisor") 
+    // .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) || [];
+
+    console.log("filteredTickets",filteredTickets);
 
   const [currentPage, setCurrentPage] = useState(1);
   const ticketsPerPage = 13;
