@@ -148,7 +148,7 @@ const Table2 = () => {
               Next
             </button>
           </div>
-          {selectedTicket && console.log("selectedTicket ", selectedTicket)}
+
           {selectedTicket && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -172,7 +172,6 @@ const Table2 = () => {
             </div>
           )}
 
-          {isEscalationModalOpen && console.log("selectedTicket 2 ", selectedTicket2)}
           {isEscalationModalOpen && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -184,6 +183,10 @@ const Table2 = () => {
                 <div className="mt-1 flex justify-between border border-gray-300 px-2 py-3 rounded-md">
                   <p><strong>Assigned to:</strong> {selectedTicket2?.assignedTo ? `${selectedTicket2.assignedTo?.firstName} ${selectedTicket2.assignedTo?.lastName}` : "Not assigned"}</p>
                   <p><strong>Status:</strong> {selectedTicket2?.status}</p>
+                </div>
+                <div className="mt-1 space-y-5 border border-gray-300 px-2 py-3 rounded-md">
+                  <p><strong>Title:</strong> {selectedTicket2.title}</p>
+                  <p><strong>Description:</strong> {selectedTicket2.description}</p>
                 </div>
                 <div className="mt-4">
                   <textarea
