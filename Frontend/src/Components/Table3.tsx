@@ -14,6 +14,14 @@ const Table3 = () => {
   const [updateTicket] = useUpdateTicketMutation();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 60000); // Refresh every 60 seconds
+
+    return () => clearInterval(interval); // Cleanup function
+  }, [refetch]);
+
+  useEffect(() => {
     if (groupData?.group) {
       setGroupList(groupData.group);
     }

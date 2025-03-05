@@ -104,7 +104,7 @@ console.log("totTickets ", totTickets);
               </div>
             <div className="mx-2 space-y-4 mt-10 text-[13px]">
                 <div className="bg-indigo-500 px-5 py-2 rounded-md"> 
-                    <p>25555 tickets closed</p>
+                    <p>{totClosedTickets} tickets closed</p>
                 </div>
                 <div className="bg-indigo-500 px-5 py-2 rounded-md"> 
                     <p>125 Tickets Breached SLA</p>

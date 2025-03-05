@@ -15,7 +15,7 @@ const incidentSchema = new mongoose.Schema({
     required: true 
   },
   status: { type: String, 
-    enum: ["Open", "In Progress", "Resolved", "Closed"], 
+    enum: ["Open", "In Progress", "Resolved", "Closed","Escalated"], 
     default: "Open" 
   },
   loggedAt:{

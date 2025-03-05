@@ -94,7 +94,7 @@ const AddTicket = () => {
               </select>
             </div>
 
-            {/* Status (fixed value) */}
+          
             <div>
               <select
                 className="w-full p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
@@ -104,7 +104,7 @@ const AddTicket = () => {
               </select>
             </div>
 
-            {/* Group (dynamically populated from groupsData) */}
+       
             <div>
               <select
                 value={group}
@@ -122,7 +122,7 @@ const AddTicket = () => {
               </select>
             </div>
 
-            {/* Region (dynamically populated from regionsData) */}
+
             <div>
               <select
                 value={region}

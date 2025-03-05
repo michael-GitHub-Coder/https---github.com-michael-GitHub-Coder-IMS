@@ -51,6 +51,14 @@ const Table = () => {
     setSearchQuery(""); 
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 60000); 
+
+    return () => clearInterval(interval); 
+  }, [refetch]);
+
   const handleStatusChangeClick = (ticketId: string) => {
     setDropdownStatusTicketId(ticketId === dropdownStatusTicketId ? null : ticketId);
     setStatusSearchQuery(""); 
