@@ -7,6 +7,7 @@ import AddTicket from "./Components/AddTicket"
 import Table from "./Components/Table"
 import Addgroup from "./Components/AddGroup"
 import Userprofile from "./Components/Userprofile"
+import TableLayout from "./layout.tsx/TableLayout"
 
 const App = () => {
   
@@ -17,10 +18,10 @@ const App = () => {
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} >
-        <Route index element={<Table />} /> 
+        <Route index element={<TableLayout />} /> 
         <Route path="Add-user" element={<AddUser />} />
         <Route path="Add-ticket" element={<AddTicket />} />
-        <Route path="table" element={<Table />} />
+        <Route path="table" element={<TableLayout />} />
         <Route path="Add-group" element={<Addgroup />}/>
         <Route path="Profile" element={<Userprofile />} />
       </Route>
@@ -33,16 +34,3 @@ const App = () => {
 }
 
 export default App
-
-
-
-{/* <Route path="/" element={<Mainlayout/>} >
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} >
-          <Route index element={<Table />} /> 
-          <Route path="Add-user" element={<AddUser />} />
-          <Route path="Add-ticket" element={<AddTicket />} />
-          <Route path="table" element={<Table />} />
-        </Route>
-      </Route> */}

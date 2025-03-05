@@ -1,20 +1,38 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation, useGetMeQuery } from "../slices/usersAPISlice";
+import { useGetTicketsQuery, useGetUsersQuery, useUpdateTicketMutation, useGetMeQuery, useGetGroupsQuery } from "../slices/usersAPISlice";
 
-const Table = () => {
+const Table3 = () => {
   const { data: me } = useGetMeQuery({});
   let logedInUser = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const [groupList, setGroupList] = useState<any[]>([]);
+  const [selectedTicket, setSelectedTicket] = useState<any | null>(null);  // New state to handle selected ticket for modal
 
- 
-  const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
   const { data: tickets, error, isLoading, refetch } = useGetTicketsQuery({});
   const { data: users } = useGetUsersQuery({});
+  const { data: groupData } = useGetGroupsQuery({});
   const [updateTicket] = useUpdateTicketMutation();
 
-  // Filter tickets that are not closed and sort by creation date (most recent first)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 60000); // Refresh every 60 seconds
+
+    return () => clearInterval(interval); // Cleanup function
+  }, [refetch]);
+
+  useEffect(() => {
+    if (groupData?.group) {
+      setGroupList(groupData.group);
+    }
+  }, [groupData]);
+
+  const dataa = groupList.filter((g) => g?.supervisorId?._id === me?.user?._id).map((g) => g?.name);
+
   const filteredTickets = tickets?.tickets
-    .filter((data: any) => data.status !== "Closed")
+    .filter((ticket: any) => ticket.status !== "Closed")
+    .filter((ticket: any) => me?.user?.role === "Supervisor")
+    .filter((ticket: any) => dataa.includes(ticket.group?.name))
     .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) || [];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,15 +44,7 @@ const Table = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [dropdownStatusTicketId, setDropdownStatusTicketId] = useState<string | null>(null);
   const [statusSearchQuery, setStatusSearchQuery] = useState("");
-
-  
-  const handleViewClick = (ticket: any) => {
-    setSelectedTicket(ticket);  
-  };
-
-  const closeModal = () => {
-    setSelectedTicket(null); 
-  };
+ 
 
   useEffect(() => {
     if (dropdownTicketId) setSearchQuery("");
@@ -50,14 +60,6 @@ const Table = () => {
     setDropdownTicketId(ticketId === dropdownTicketId ? null : ticketId);
     setSearchQuery(""); 
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
-    }, 60000); 
-
-    return () => clearInterval(interval); 
-  }, [refetch]);
 
   const handleStatusChangeClick = (ticketId: string) => {
     setDropdownStatusTicketId(ticketId === dropdownStatusTicketId ? null : ticketId);
@@ -75,15 +77,12 @@ const Table = () => {
   };
 
   const handleStatusSelect = async (ticketId: string, status: string, assignedToId: string | undefined) => {
-    console.log("Updating ticket with ID:", ticketId, "Status:", status, "Assigned to:", assignedToId);
-  
     try {
       const response = await updateTicket({
-        ticketId, 
+        ticketId,
         status,
         assignedTo: assignedToId
-     });
-      console.log("Response:", response);
+      });
       setDropdownStatusTicketId(null);
       refetch();
     } catch (error) {
@@ -91,16 +90,27 @@ const Table = () => {
     }
   };
 
+  const handleViewTicket = (ticketId: string) => {
+    const ticket = tickets?.tickets.find((ticket: any) => ticket._id === ticketId);
+    if (ticket) {
+      setSelectedTicket(ticket); 
+    }
+  };
+
+  const closeModal = () => {
+    setSelectedTicket(null);  
+  };
+
+  {console.log("selectedTicket", selectedTicket)}
+
   return (
     <div className="ml-10 mr-17">
       {isLoading && <p className="text-center min-w-6xl">Loading tickets...</p>}
       {error && <p className="text-red-500 text-center">Error fetching tickets</p>}
 
       {!isLoading && !error && tickets && (
-        <div className=" rounded-tl-md rounded-tr-md">
-          {/* Conditional Rendering Based on User Role */}
-         
-          <table className="table-auto min-w-6xl w-auto border border-gray-300 ">
+        <div className="rounded-tl-md rounded-tr-md ">
+          <table className="table-auto min-w-6xl w-full border border-gray-300 ">
             <thead className="bg-indigo-500 border-2 border-indigo-500 rounded-tl-md rounded-tr-md text-white">
               <tr>
                 {["Ticket ID", "Priority", "Ticket Group", "Assigned by", "Assigned to", "Status", "Actions"].map((heading) => (
@@ -121,7 +131,7 @@ const Table = () => {
                         {ticket.assignedTo ? `${ticket.assignedTo.firstName ?? ""} ${ticket.assignedTo.lastName ?? ""}`.trim() : "Unassigned"}
                       </div>
                       {dropdownTicketId === ticket._id && (
-                        <div className="absolute top-0 bg-white border border-gray-300 shadow-lg rounded  w-full z-10">
+                        <div className="absolute top-full  bg-white border border-gray-300 shadow-lg rounded w-full z-20">
                           <input
                             type="text"
                             className="w-full p-2 border-b"
@@ -151,7 +161,7 @@ const Table = () => {
                         {ticket.status}
                       </div>
                       {dropdownStatusTicketId === ticket._id && (
-                        <div className="absolute bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
+                        <div className="absolute -left-3 overflow-visible bg-white border border-gray-300 shadow-lg rounded mt-1 w-full z-10">
                           <input
                             type="text"
                             className="w-full p-2 border-b"
@@ -176,12 +186,8 @@ const Table = () => {
                         </div>
                       )}
                     </td>
-
                     <td className="py-2 px-4">
-                      <button
-                        onClick={() => handleViewClick(ticket)}  
-                        className="bg-indigo-500 text-white px-4 py-2 rounded cursor-pointer"
-                      >
+                      <button onClick={() => handleViewTicket(ticket._id)} className="bg-indigo-500 text-white px-4 py-2 rounded cursor-pointer">
                         View
                       </button>
                     </td>
@@ -189,7 +195,7 @@ const Table = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="text-center py-4">No tickets available</td>
+                  <td colSpan={7} className="text-center py-4">No tickets available</td>
                 </tr>
               )}
             </tbody>
@@ -199,7 +205,7 @@ const Table = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className={`mx-2 px-3 py-2 ${currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-600"}`}
+              className={`mx-2 px-3 py-2 ${currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-600 cursor-pointer"}`}
             >
               Previous
             </button>
@@ -207,14 +213,14 @@ const Table = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className={`mx-2 px-3 py-2 ${currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-600"}`}
+              className={`mx-2 px-3 py-2 ${currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-indigo-500 text-white hover:bg-indigo-600 cursor-pointer"}`}
             >
               Next
             </button>
           </div>
 
           {selectedTicket && (
-            <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-xl font-bold mb-4">Ticket Details</h2>
                 <div className="flex justify-between border border-gray-300 px-2 py-3 rounded-md">
@@ -235,11 +241,10 @@ const Table = () => {
               </div>
             </div>
           )}
-
         </div>
       )}
     </div>
   );
 };
 
-export default Table;
+export default Table3;

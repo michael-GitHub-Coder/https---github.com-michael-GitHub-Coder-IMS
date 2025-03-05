@@ -48,7 +48,9 @@ export const getAllRegions = async (req,res) =>{
             return res.status(401).json({message:"Unauthorized"});
         }
 
-        if(user.role !== "Admin" ){
+
+   
+        if(user.role !== "Admin"  ){
             return res.status(403).json({message:"Permission Denied"});
         }
 

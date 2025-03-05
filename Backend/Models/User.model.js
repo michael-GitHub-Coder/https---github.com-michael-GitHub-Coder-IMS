@@ -31,6 +31,10 @@ const userschema = new mongoose.Schema({
         type:String,
         required:false
     },
+    city:{
+        type:String,
+        required:false
+    },
     postalCode:{
         type:String,
         required:false
@@ -40,6 +44,11 @@ const userschema = new mongoose.Schema({
         default:"Admin",
         enum: ["Admin", "Supervisor", "Technician"],
         required:true
+    },
+    group: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Group", 
+        required: false 
     },
     lastLogin:{
         type:Date,

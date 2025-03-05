@@ -3,13 +3,13 @@ import bcryptjs from "bcryptjs"
 import crypto from "crypto"
 import {generateTokenAndsetCookie} from "../Utils/generateTokenAndsetCookie.js"
 import {sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail, sendverificationEmail} from "../mailtrap/emails.js"
-
+import mongoose from "mongoose";
 
 export const signup = async (req,res) =>{
 
-    const {email,name,password} = req.body;
+    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city} = req.body;
 
-    if(!email || !name || !password){
+    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city){
         return res.status(400).json({message:"All fields are required"});
     }
 
@@ -24,8 +24,7 @@ export const signup = async (req,res) =>{
 		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newUser = new User({
-			email,
-			name,
+			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,
 			password:hashedPassword,
 			verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
@@ -65,7 +64,7 @@ export const login = async (req, res) => {
 
 		user.lastLogin = new Date();
 		await user.save();
-
+        
 		res.status(200).json({
 			success: true,
 			message: "Logged in successfully",
@@ -73,6 +72,7 @@ export const login = async (req, res) => {
 				...user._doc,
 				password: undefined,
 			},
+           
 		});
 	} catch (error) {
       
@@ -183,7 +183,8 @@ export const resetPassord = async (req,res) => {
 export const checkAuth = async (req,res) =>{
 
     try {
-        const user = await User.findById(req.userId).select("-password");
+        const user = await User.findById(req.userId).select("-password")
+        .populate("group","name");
         if(!user){
             return res.status(400).json({success:false,message:"User not found"});
         }
@@ -199,9 +200,9 @@ export const checkAuth = async (req,res) =>{
 export const addMembers = async (req,res) =>{
    
 
-    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password} = req.body;
+    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city,group} = req.body;
 
-    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password){
+    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city || !group){
         return res.status(400).json({message:"All fields are required"});
     }
 
@@ -226,7 +227,7 @@ export const addMembers = async (req,res) =>{
 		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newUser = new User({
-			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,
+			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,group,
 			password:hashedPassword,
 			verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
@@ -263,3 +264,36 @@ export const getAllUsers = async (req,res) =>{
         res.status(500).json({success:false,message:error.message});
     }
 }
+
+export const updateUser = async (req, res) => {
+    const { firstName, lastName, email, role, phoneNumber, bio, country, postalCode, city } = req.body;
+    const { _id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+        return res.status(400).json({ message: "Invalid user ID", data:_id });
+      }
+
+    try {
+        const user = await User.findById(_id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        user.firstName = firstName?.trim() || user.firstName;
+        user.lastName = lastName?.trim() || user.lastName;
+        user.email = email?.trim() || user.email;
+        user.role = role || user.role;
+        user.phoneNumber = phoneNumber?.trim() || user.phoneNumber;
+        user.bio = bio?.trim() || user.bio;
+        user.country = country?.trim() || user.country;
+        user.city = city?.trim() || user.city;
+        user.postalCode = postalCode?.trim() || user.postalCode;
+
+        await user.save();
+
+        res.status(200).json({ message: "Profile updated", user });
+    } catch (error) {
+        console.error("Something went wrong:", error.message);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+};

@@ -31,13 +31,89 @@ export const usersAPISlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        getMe: builder.query({
+            query:()=>({
+                url: `${USERS_URL}/check-auth`,
+                method:"GET"
+            })
+        }),
         getTickets: builder.query({
             query:()=>({
                 url: `${USERS_URL}/All-Tickets`,
                 method:"GET"
             })
-        })
+        }),
+        updateProfile: builder.mutation({
+           query:({_id, ...data})=>({
+                url: `${USERS_URL}/Update-profile/${_id}`,
+                method: "PUT",
+                body: data
+           })
+        }),
+        updateGroup: builder.mutation({
+            query:({id, ...data})=>({
+                 url: `${USERS_URL}/Add-to-group/${id}`,
+                 method: "PUT",
+                 body: data
+            })
+         }),
+        addticket: builder.mutation({
+            query: (data)=>({
+                url: `${USERS_URL}/Add-Ticket`,
+                method: "POST",
+                body: data
+            })
+        }),
+        getUsers: builder.query({
+            query: () => ({
+                url: `${USERS_URL}/All-Users`,
+                method: "GET",
+            }),
+        }),
+        getRegions: builder.query({
+            query: () => ({
+                url: `${USERS_URL}/All-Regions`,
+                method: "GET",
+            }),
+        }),
+        getGroups: builder.query({
+            query: () => ({
+                url: `${USERS_URL}/getGroups`,
+                method: "GET",
+            }),
+        }),
+        updateTicket: builder.mutation({
+            query: ({ ticketId, assignedTo, status}) => ({
+                url: `${USERS_URL}/update-ticket/${ticketId}`,
+                method: "PUT",
+                body:{
+                    ...(assignedTo ? { assignedTo } : {}), 
+                    ...(status ? { status } : {}) 
+                }     
+            }),
+        }),
+        addGroup: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/Add-Group`,
+                method: "POST",
+                body: data
+            })
+        }),
     })
 })
 
-export const { useLoginMutation,useLogoutMutation,useGetTicketsQuery,useAddUserMutation } = usersAPISlice;
+export const {
+    useUpdateGroupMutation,
+    useGetGroupsQuery, 
+    useAddGroupMutation,
+    useGetRegionsQuery, 
+    useGetUsersQuery, 
+    useUpdateTicketMutation, 
+    useLoginMutation,
+    useRegisterMutation,
+    useLogoutMutation,
+    useGetTicketsQuery,
+    useAddUserMutation,
+    useUpdateProfileMutation,
+    useGetMeQuery,
+    useAddticketMutation } = usersAPISlice;

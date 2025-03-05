@@ -2,9 +2,13 @@ import {Group} from '../Models/group.model.js';
 import {User} from '../Models/User.model.js';
 import {Region} from '../Models/region.model.js';
 
+
 export const addGroup = async (req, res) =>{
     
     const {name,regionId,supervisorId} = req.body;
+    if(!regionId || !supervisorId){
+        return res.status(400).json({message:"All fields are required"});
+    }
     if(!name){
         return res.status(400).json({message:"All fields are required"});
     }
@@ -13,7 +17,8 @@ export const addGroup = async (req, res) =>{
         const group = new Group({
             name,
             regionId,
-            supervisorId
+            supervisorId,
+            createdBy:req.userId,
         });
         await group.save();
         res.status(201).json({message:"Group created successfully ",group});
@@ -39,10 +44,7 @@ export const addToGroup = async (req, res) =>{
     const {regionId, supervisorId} = req.body;
     const {id} = req.params;
 
-    if(!regionId || !supervisorId){
-        return res.status(400).json({message:"All fields are required"});
-    }
-
+    
     try {
         
         const user = await User.findById(req.userId).select("-password");
@@ -68,7 +70,7 @@ export const addToGroup = async (req, res) =>{
             return res.status(404).json({message:"Supervisor not found"});
         }
 
-        group.name = group.name;
+        group.name = req.body.name;
         group.regionId = regionId;
         group.supervisorId = supervisorId;
 
@@ -81,4 +83,20 @@ export const addToGroup = async (req, res) =>{
         res.status(500).json({message:error.message})
     }
    
+}
+
+
+export const getGroups = async (req,res) =>{
+
+    try {
+        const group = await Group.find().populate("createdBy","firstName lastName email")
+        .populate("supervisorId","firstName lastName email")
+        .populate("regionId","name");
+
+        res.status(200).json({group});
+
+    } catch (error) {
+        console.log("getAGroups error",error);
+        res.status(500).json({message:error.message});
+    }
 }

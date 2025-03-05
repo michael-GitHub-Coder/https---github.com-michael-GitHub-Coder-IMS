@@ -15,12 +15,16 @@ const incidentSchema = new mongoose.Schema({
     required: true 
   },
   status: { type: String, 
-    enum: ["Open", "In Progress", "Resolved", "Closed"], 
+    enum: ["Open", "In Progress", "Resolved", "Closed","Escalated"], 
     default: "Open" 
   },
   loggedAt:{
     type:Date,
     default:Date.now
+  },
+  closedAt:{
+    type:Date,
+    default:null
   },
   createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
