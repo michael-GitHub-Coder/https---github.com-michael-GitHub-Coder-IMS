@@ -44,7 +44,7 @@ export const addToGroup = async (req, res) =>{
     const {regionId, supervisorId} = req.body;
     const {id} = req.params;
 
-     console.log("addToGroup", req.body, req.params);
+    
     try {
         
         const user = await User.findById(req.userId).select("-password");

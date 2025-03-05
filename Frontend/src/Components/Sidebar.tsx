@@ -6,6 +6,7 @@ import { FiBookOpen, FiHome, FiLogOut, FiUser, FiUsers } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { clearCredentials } from "../slices/authSlice";
 import { useGetMeQuery } from "../slices/usersAPISlice";
+import { GrEscalator } from "react-icons/gr";
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   const { data: user } = useGetMeQuery({});
@@ -89,6 +90,18 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
               </Link>
             </div>
           )}
+
+          {/* {user?.user?.role !== "Admin" && (
+              <div className="flex items-center space-x-3 cursor-pointer">
+              <Link to="/dashboard/Add-user">
+                <div className="flex gap-2">
+                  <GrEscalator  size={24} />
+                  {isOpen && <span>Escalations</span>}
+                </div>
+              </Link>
+            </div>
+          )} */}
+
         </div>
 
         <div

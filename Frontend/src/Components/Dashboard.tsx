@@ -20,32 +20,36 @@ const Dashboard = () => {
   const [NoOfMedium, setNoOfMedium] = useState(0);
   const [ClosedTickets,setClosedTickets] = useState(0);
   const [totTickets,settotTickets] = useState(0);
-  
-  // const today = new Date();
-  // today.setHours(0, 0, 0, 0); // Start of today
-
-  // const ticketsToday = tickets?.tickets?.filter((ticket: any) => 
-  //   new Date(ticket.createdAt) >= today
-  // ) || [];
+  const [totClosedTickets,settotClosedTickets] = useState(0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Start of today
 
 
 
- 
+
+ //console.log(user);
 
   useEffect(() => {
     if (tickets) {
       
       settotTickets(tickets.tickets.length);
 
-      const filteredTicketsClosed = tickets.tickets.filter((data: any) => data.status !== "Closed");
-      setClosedTickets(tickets.tickets.length - filteredTicketsClosed.length);
-      // const closedTicketsToday = tickets?.tickets?.filter((ticket: any) => 
-      //   ticket.status === "Closed" && new Date(ticket.closedAt) >= today
+      
+      // const filteredTicketsClosed = tickets.tickets.filter((data: any) => data.status !== "Closed" && data.assignedTo?._id === user.user?._id);
+      const userTickets = tickets.tickets.filter((data: any) => data.assignedTo?._id === user.user?._id);
+      // setClosedTickets(userTickets.length - filteredTicketsClosed.length);
+
+      
+      const closedTicketsToday = tickets?.tickets?.filter((ticket: any) => 
+        ticket.status === "Closed" && new Date(ticket.closedAt) >= today
+      ) || [];
+   
+      // const ticketsToday = tickets?.tickets?.filter((ticket: any) => 
+      //   new Date(ticket.createdAt) >= today
       // ) || [];
 
-      // const closedPercentageToday = ticketsToday.length > 0 
-      // ? Math.round((closedTicketsToday.length / ticketsToday.length) * 100) 
-      // : 0;
+      setClosedTickets(userTickets.length);
+      settotClosedTickets(closedTicketsToday.length);
 
       const filteredTicketsCritical = tickets.tickets.filter((data: any) => data.priority !== "Critical");
       setNoOFCritical(tickets.tickets.length - filteredTicketsCritical.length);
@@ -61,8 +65,9 @@ const Dashboard = () => {
     }
   }, [tickets]);
 
-
-  const t = Math.round((ClosedTickets / totTickets) * 100);
+console.log("totClosedTickets ", totClosedTickets);
+console.log("totTickets ", totTickets);
+  const t = Math.round((totClosedTickets / totTickets) * 100);
   
 
   const handleUserProfile = () =>{
