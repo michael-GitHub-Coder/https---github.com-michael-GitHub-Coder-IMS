@@ -27,6 +27,7 @@ const Table2 = () => {
 
   const [dropdownStatusTicketId, setDropdownStatusTicketId] = useState<string | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<any | null>();
+  const [selectedTicket2, setSelectedTicket2] = useState<any | null>();
   const [escalationMessage, setEscalationMessage] = useState(""); 
   const [isEscalationModalOpen, setIsEscalationModalOpen] = useState(false); 
 
@@ -60,13 +61,6 @@ const Table2 = () => {
     }
   };
   
-
-
-  const handleViewClick = (ticket: any) => {
-    setSelectedTicket(ticket);
-    console.log("Selected Ticket:", ticket);
-  };
-
   return (
     <div className="ml-10 mr-17">
       {isLoading && <p className="text-center min-w-6xl">Loading tickets...</p>}
@@ -122,6 +116,7 @@ const Table2 = () => {
                         size={30}
                         className="cursor-pointer"
                         onClick={() => {
+                          setSelectedTicket2(ticket)
                           setIsEscalationModalOpen(true); 
                         }}
                       />
@@ -153,7 +148,7 @@ const Table2 = () => {
               Next
             </button>
           </div>
-
+          {selectedTicket && console.log("selectedTicket ", selectedTicket)}
           {selectedTicket && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -177,17 +172,18 @@ const Table2 = () => {
             </div>
           )}
 
+          {isEscalationModalOpen && console.log("selectedTicket 2 ", selectedTicket2)}
           {isEscalationModalOpen && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-xl font-bold mb-4">Escalate Ticket</h2>
                 <div className="flex justify-between border border-gray-300 px-2 py-3 rounded-md">
-                  <p><strong>Ticket ID:</strong> {selectedTicket._id}</p>
-                  <p><strong>Priority:</strong> {selectedTicket.priority}</p>
+                  <p><strong>Ticket ID:</strong> {selectedTicket2?._id}</p>
+                  <p><strong>Priority:</strong> {selectedTicket2?.priority}</p>
                 </div>
                 <div className="mt-1 flex justify-between border border-gray-300 px-2 py-3 rounded-md">
-                  <p><strong>Assigned to:</strong> {selectedTicket.assignedTo ? `${selectedTicket.assignedTo.firstName} ${selectedTicket.assignedTo.lastName}` : "Not assigned"}</p>
-                  <p><strong>Status:</strong> {selectedTicket.status}</p>
+                  <p><strong>Assigned to:</strong> {selectedTicket2?.assignedTo ? `${selectedTicket2.assignedTo?.firstName} ${selectedTicket2.assignedTo?.lastName}` : "Not assigned"}</p>
+                  <p><strong>Status:</strong> {selectedTicket2?.status}</p>
                 </div>
                 <div className="mt-4">
                   <textarea
@@ -202,7 +198,7 @@ const Table2 = () => {
                     Close
                   </button>
                   <button
-                    onClick={() => handleEscalate(selectedTicket._id)}
+                    onClick={() => handleEscalate(selectedTicket2._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer"
                   >
                     Escalate
