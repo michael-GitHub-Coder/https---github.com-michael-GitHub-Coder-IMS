@@ -62,10 +62,10 @@ const Table2 = () => {
   
 
 
-  const handleViewClick = (ticket: any) => {
-    setSelectedTicket(ticket);
-    console.log("Selected Ticket:", ticket);
-  };
+  // const handleViewClick = (ticket: any) => {
+  //   setSelectedTicket(ticket);
+  //   console.log("Selected Ticket:", ticket);
+  // };
 
   return (
     <div className="ml-10 mr-17">
@@ -182,12 +182,12 @@ const Table2 = () => {
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-xl font-bold mb-4">Escalate Ticket</h2>
                 <div className="flex justify-between border border-gray-300 px-2 py-3 rounded-md">
-                  <p><strong>Ticket ID:</strong> {selectedTicket._id}</p>
-                  <p><strong>Priority:</strong> {selectedTicket.priority}</p>
+                  <p><strong>Ticket ID:</strong> {selectedTicket?._id}</p>
+                  <p><strong>Priority:</strong> {selectedTicket?.priority}</p>
                 </div>
                 <div className="mt-1 flex justify-between border border-gray-300 px-2 py-3 rounded-md">
-                  <p><strong>Assigned to:</strong> {selectedTicket.assignedTo ? `${selectedTicket.assignedTo.firstName} ${selectedTicket.assignedTo.lastName}` : "Not assigned"}</p>
-                  <p><strong>Status:</strong> {selectedTicket.status}</p>
+                  <p><strong>Assigned to:</strong> {selectedTicket?.assignedTo ? `${selectedTicket.assignedTo?.firstName} ${selectedTicket.assignedTo?.lastName}` : "Not assigned"}</p>
+                  <p><strong>Status:</strong> {selectedTicket?.status}</p>
                 </div>
                 <div className="mt-4">
                   <textarea

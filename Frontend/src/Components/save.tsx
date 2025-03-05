@@ -12,7 +12,7 @@ const Table2 = () => {
       refetch();
     }, 60000); // Refresh every 60 seconds
 
-    return () => clearInterval(interval); // Cleanup function
+    return () => clearInterval(interval); 
   }, [refetch]);
 
   const filteredTickets = tickets?.tickets
@@ -177,7 +177,7 @@ const Table2 = () => {
             </div>
           )}
 
-          {isEscalationModalOpen && (
+          {isEscalationModalOpen && selectedTicket && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-xl font-bold mb-4">Escalate Ticket</h2>
