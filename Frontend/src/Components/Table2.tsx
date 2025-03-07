@@ -12,7 +12,7 @@ const Table2 = () => {
       refetch();
     }, 60000); // Refresh every 60 seconds
 
-    return () => clearInterval(interval); // Cleanup function
+    return () => clearInterval(interval); 
   }, [refetch]);
 
   const filteredTickets = tickets?.tickets
@@ -42,11 +42,7 @@ const Table2 = () => {
   };
 
   const handleEscalate = async (ticketId: string) => {
-    if (!selectedTicket) {
-      console.error("No ticket selected for escalation");
-      return; 
-    }
-  
+
     try {
       await updateTicket({
         ticketId,
@@ -108,13 +104,13 @@ const Table2 = () => {
                     <td className="py-2 px-4 flex gap-4">
                       <button
                         onClick={() => setSelectedTicket(ticket)}
-                        className="bg-indigo-500 text-white px-4 py-2 rounded cursor-pointer"
+                        className="bg-indigo-500 hover:bg-indigo-900 text-white px-4 py-2 rounded cursor-pointer"
                       >
                         View
                       </button>
                       <GrEscalator
                         size={30}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-indigo-500 hover:text-indigo-900"
                         onClick={() => {
                           setSelectedTicket2(ticket)
                           setIsEscalationModalOpen(true); 

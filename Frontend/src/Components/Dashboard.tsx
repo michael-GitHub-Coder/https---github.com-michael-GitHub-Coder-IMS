@@ -51,17 +51,17 @@ const Dashboard = () => {
       setClosedTickets(userTickets.length);
       settotClosedTickets(closedTicketsToday.length);
 
-      const filteredTicketsCritical = tickets.tickets.filter((data: any) => data.priority !== "Critical");
-      setNoOFCritical(tickets.tickets.length - filteredTicketsCritical.length);
+      const filteredTicketsCritical = tickets?.tickets?.filter((data: any) => data.priority !== "Critical");
+      setNoOFCritical(tickets?.tickets?.length - filteredTicketsCritical.length);
 
-      const filteredTicketsHigh = tickets.tickets.filter((data: any) => data.priority !== "High");
-      setNoOfHigh(tickets.tickets.length - filteredTicketsHigh.length);
+      const filteredTicketsHigh = tickets?.tickets?.filter((data: any) => data.priority !== "High");
+      setNoOfHigh(tickets?.tickets?.length - filteredTicketsHigh.length);
 
-      const filteredTicketsLow = tickets.tickets.filter((data: any) => data.priority !== "Low");
-      setNoOfLow(tickets.tickets.length - filteredTicketsLow.length);
+      const filteredTicketsLow = tickets?.tickets?.filter((data: any) => data.priority !== "Low");
+      setNoOfLow(tickets?.tickets?.length - filteredTicketsLow.length);
 
-      const filteredTicketsMedium = tickets.tickets.filter((data: any) => data.priority !== "Medium");
-      setNoOfMedium(tickets.tickets.length - filteredTicketsMedium.length);
+      const filteredTicketsMedium = tickets?.tickets?.filter((data: any) => data.priority !== "Medium");
+      setNoOfMedium(tickets?.tickets?.length - filteredTicketsMedium.length);
     }
   }, [tickets]);
 
