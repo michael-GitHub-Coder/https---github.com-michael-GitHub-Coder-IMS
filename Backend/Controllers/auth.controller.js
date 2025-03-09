@@ -15,6 +15,7 @@ import {
     NOT_FOUND,
     CONFLICT,
     INTERNAL_SERVER_ERROR} from "../statusCodes/statusCodes.js";
+import { AFTER_24_HOURS } from "../Utils/timeStamps.js";
 
 export const signup = async (req,res) =>{
 
@@ -27,7 +28,7 @@ export const signup = async (req,res) =>{
     try {
         const user = await User.findOne({email});
         if(user){
-            return res.status(BAD_REQUEST).json({message:"User already exists"});
+            return res.status(CONFLICT).json({message:"User already exists"});
         }
 
         //const salt = await bcryptjs.genSalt(10);
@@ -38,13 +39,13 @@ export const signup = async (req,res) =>{
 			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,
 			password:hashedPassword,
 			verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
+            verificationTokenExpiresAt: AFTER_24_HOURS
 		});
         await newUser.save();
 
 		
 		generateTokenAndsetCookie(res,newUser._id);
-       await sendverificationEmail(newUser.email, verificationToken);
+      // await sendverificationEmail(newUser.email, verificationToken);
 
         res.status(CREATED).json({success:true, message:"User created successfully",User:newUser});
 
@@ -76,7 +77,7 @@ export const login = async (req, res) => {
 		user.lastLogin = new Date();
 		await user.save();
         
-		res.status({OK}).json({
+		res.status(OK).json({
 			success: true,
 			message: "Logged in successfully",
 			user: {
@@ -111,7 +112,7 @@ export const verifyEmail = async (req,res) =>{
 
         await user.save();
 
-        await sendWelcomeEmail(user.email, user.name);
+        //await sendWelcomeEmail(user.email, user.name);
         res.status(OK).json({
             success:true,
             message:"Email verified successfully",
@@ -149,7 +150,7 @@ export const forgotPassword = async (req,res) =>{
         user.resetPasswordExpiresAt = restTokenExpiresAt;
 
         await user.save();
-        await sendPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+        //await sendPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
 
         res.status(OK).json({success:true,message:"Password reset link sent to your email"});
 
@@ -182,7 +183,7 @@ export const resetPassord = async (req,res) => {
 
         await user.save();
     
-        sendResetSuccessEmail(user.email);
+       //sendResetSuccessEmail(user.email);
         res.status(OK).json({success:true,message:"Password reset successfull"});
 
     } catch (error) {
