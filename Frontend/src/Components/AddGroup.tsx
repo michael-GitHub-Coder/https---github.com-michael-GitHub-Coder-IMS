@@ -137,7 +137,7 @@ const AddGroup = () => {
           </table>
         </div>
 
-        {/* Add Group Modal */}
+      
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
@@ -172,7 +172,7 @@ const AddGroup = () => {
           </div>
         )}
 
-        {/* Edit Group Modal */}
+       
         {isEditModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">

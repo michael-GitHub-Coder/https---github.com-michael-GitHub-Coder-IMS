@@ -4,19 +4,31 @@ import crypto from "crypto"
 import {generateTokenAndsetCookie} from "../Utils/generateTokenAndsetCookie.js"
 import {sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail, sendverificationEmail} from "../mailtrap/emails.js"
 import mongoose from "mongoose";
+import {
+    OK,
+    CREATED,
+    ACCEPTED,
+    NO_CONTENT,
+    BAD_REQUEST,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    NOT_FOUND,
+    CONFLICT,
+    INTERNAL_SERVER_ERROR} from "../statusCodes/statusCodes.js";
+import { AFTER_24_HOURS } from "../Utils/timeStamps.js";
 
 export const signup = async (req,res) =>{
 
     const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city} = req.body;
 
     if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city){
-        return res.status(400).json({message:"All fields are required"});
+        return res.status(OK).json({message:"All fields are required"});
     }
 
     try {
         const user = await User.findOne({email});
         if(user){
-            return res.status(400).json({message:"User already exists"});
+            return res.status(CONFLICT).json({message:"User already exists"});
         }
 
         //const salt = await bcryptjs.genSalt(10);
@@ -27,19 +39,19 @@ export const signup = async (req,res) =>{
 			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,
 			password:hashedPassword,
 			verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
+            verificationTokenExpiresAt: AFTER_24_HOURS
 		});
         await newUser.save();
 
 		
 		generateTokenAndsetCookie(res,newUser._id);
-       await sendverificationEmail(newUser.email, verificationToken);
+      // await sendverificationEmail(newUser.email, verificationToken);
 
-        res.status(201).json({success:true, message:"User created successfully",User:newUser});
+        res.status(CREATED).json({success:true, message:"User created successfully",User:newUser});
 
     } catch (error) {
         console.log("Something went wrong", error.message);
-        res.status(500).json({message: "Something went wrong"});
+        res.status(INTERNAL_SERVER_ERROR).json({message: "Something went wrong"});
     }
 
 };
@@ -50,22 +62,22 @@ export const login = async (req, res) => {
 	try {
 		const user = await User.findOne({ email });
 		if (!user) {
-			return res.status(400).json({ success: false, message: "Invalid credentials" });
+			return res.status(BAD_REQUEST).json({ success: false, message: "Invalid credentials" });
 		}
 		const isPasswordValid = await bcryptjs.compare(password, user.password);
 		if (!isPasswordValid) {
-			return res.status(400).json({ success: false, message: "Invalid credentials" });
+			return res.status(BAD_REQUEST).json({ success: false, message: "Invalid credentials" });
 		}
-	    // if(!user.isVerified){
-		// 	return res.status(400).json({success:false, message:"Email not verified"});
-		// }
+	    if(!user.isVerified){
+			return res.status(400).json({success:false, message:"Email not verified"});
+		}
 
 		generateTokenAndsetCookie(res, user._id);
 
 		user.lastLogin = new Date();
 		await user.save();
         
-		res.status(200).json({
+		res.status(OK).json({
 			success: true,
 			message: "Logged in successfully",
 			user: {
@@ -77,7 +89,7 @@ export const login = async (req, res) => {
 	} catch (error) {
       
 		console.log("Error in login ", error);
-		res.status(400).json({ success: false, message: error.message });
+		res.status(BAD_REQUEST).json({ success: false, message: error.message });
 	}
 };
 
@@ -92,7 +104,7 @@ export const verifyEmail = async (req,res) =>{
         });
 
         if(!user){
-            return res.status(400).json({success:false,message:"Invalid or expired verification code"});
+            return res.status({BAD_REQUEST}).json({success:false,message:"Invalid or expired verification code"});
         }
         user.isVerified = true;
         user.verificationToken = undefined;
@@ -100,8 +112,8 @@ export const verifyEmail = async (req,res) =>{
 
         await user.save();
 
-        await sendWelcomeEmail(user.email, user.name);
-        res.status(200).json({
+        //await sendWelcomeEmail(user.email, user.name);
+        res.status(OK).json({
             success:true,
             message:"Email verified successfully",
             user : {
@@ -112,13 +124,13 @@ export const verifyEmail = async (req,res) =>{
 
     } catch (error) {
         console.log("Verify email")
-        res.status(500).json({success:false,message:"Server error"})
+        res.status(INTERNAL_SERVER_ERROR).json({success:false,message:"Server error"})
     }
 };
 
 export const logout = async (req,res)=>{
     res.clearCookie("token");
-    res.status(200).json({success:true, message:"Logged Out successfully"});
+    res.status(OK).json({success:true, message:"Logged Out successfully"});
 };
 
 export const forgotPassword = async (req,res) =>{
@@ -128,7 +140,7 @@ export const forgotPassword = async (req,res) =>{
         const user = await User.findOne({email});
 
         if(!user){
-            return res.status(400).json({success:false,message:"User not found"})
+            return res.status(BAD_REQUEST).json({success:false,message:"User not found"})
         }
 
         const resetToken  = crypto.randomBytes(20).toString("hex");
@@ -138,13 +150,13 @@ export const forgotPassword = async (req,res) =>{
         user.resetPasswordExpiresAt = restTokenExpiresAt;
 
         await user.save();
-        await sendPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+        //await sendPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
 
-        res.status(200).json({success:true,message:"Password reset link sent to your email"});
+        res.status(OK).json({success:true,message:"Password reset link sent to your email"});
 
     } catch (error) {
         console.log("Error in forgotPassword", error);
-        res.status(400).json({success:false,message:error.message});
+        res.status(BAD_REQUEST).json({success:false,message:error.message});
     }
 };
 
@@ -160,7 +172,7 @@ export const resetPassord = async (req,res) => {
         });
 
         if(!user){
-            return res.status(400).json({success:false,message:"Invalid or expired rest token"});
+            return res.status(BAD_REQUEST).json({success:false,message:"Invalid or expired rest token"});
         }
 
         const hashedPassword = await bcryptjs.hash(password,10);
@@ -171,12 +183,12 @@ export const resetPassord = async (req,res) => {
 
         await user.save();
     
-        sendResetSuccessEmail(user.email);
-        res.status(200).json({success:true,message:"Password reset successfull"});
+       //sendResetSuccessEmail(user.email);
+        res.status(OK).json({success:true,message:"Password reset successfull"});
 
     } catch (error) {
         console.log("Error in resetPassword", error);
-        res.status(400).json({success:false,message:error.message});
+        res.status(INTERNAL_SERVER_ERROR).json({success:false,message:error.message});
     }
 };
 
@@ -186,14 +198,14 @@ export const checkAuth = async (req,res) =>{
         const user = await User.findById(req.userId).select("-password")
         .populate("group","name");
         if(!user){
-            return res.status(400).json({success:false,message:"User not found"});
+            return res.status(NOT_FOUND).json({success:false,message:"User not found"});
         }
 
-        res.status(200).json({success:true, user});
+        res.status(OK).json({success:true, user});
 
     } catch (error) {
         console.log("Error in checkAuth", error);
-        res.status(400).json({success:false,message:error.message});
+        res.status(BAD_REQUEST).json({success:false,message:error.message});
     }
 };
 
@@ -203,7 +215,7 @@ export const addMembers = async (req,res) =>{
     const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city,group} = req.body;
 
     if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city || !group){
-        return res.status(400).json({message:"All fields are required"});
+        return res.status(NOT_FOUND).json({message:"All fields are required"});
     }
 
     try {
@@ -211,15 +223,15 @@ export const addMembers = async (req,res) =>{
         const admin = await User.findById(req.userId).select("-password");
 
         if(!admin){
-            return res.status(400).json({message:"Permission Denied"});
+            return res.status(FORBIDDEN).json({message:"Permission Denied"});
         } 
         if(admin.role !== "Admin"){
-            return res.status(403).json({message:"Permission Denied", reqRole:admin.role});
+            return res.status(FORBIDDEN).json({message:"Permission Denied", reqRole:admin.role});
         }
 
         const user = await User.findOne({email});
         if(user){
-            return res.status(400).json({message:"User already exists"});
+            return res.status(CONFLICT).json({message:"User already exists"});
         }
 
         //const salt = await bcryptjs.genSalt(10);
@@ -238,11 +250,11 @@ export const addMembers = async (req,res) =>{
 		generateTokenAndsetCookie(res,newUser._id);
        // await sendverificationEmail(newUser.email, verificationToken);
 
-        res.status(201).json({success:true, message:"User created successfully",User:newUser});
+        res.status(CREATED).json({success:true, message:"User created successfully",User:newUser});
 
     } catch (error) {
         console.log("Something went wrong", error.message);
-        res.status(500).json({message: "Something went wrong"});
+        res.status(INTERNAL_SERVER_ERROR).json({message: "Something went wrong"});
     }
 
 }
@@ -258,10 +270,10 @@ export const getAllUsers = async (req,res) =>{
         //     return res.status(403).json({message:"Permission Denied"});
         // }
         const users = await User.find({}).select("-password");
-        res.status(200).json({success:true,users});
+        res.status(OK).json({success:true,users});
     } catch (error) {
         console.log("Error in getAllUsers", error);
-        res.status(500).json({success:false,message:error.message});
+        res.status(INTERNAL_SERVER_ERROR).json({success:false,message:error.message});
     }
 }
 
@@ -270,13 +282,13 @@ export const updateUser = async (req, res) => {
     const { _id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-        return res.status(400).json({ message: "Invalid user ID", data:_id });
+        return res.status(BAD_REQUEST).json({ message: "Invalid user ID", data:_id });
       }
 
     try {
         const user = await User.findById(_id);
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status({NOT_FOUND}).json({ message: "User not found" });
         }
 
         user.firstName = firstName?.trim() || user.firstName;
@@ -291,9 +303,9 @@ export const updateUser = async (req, res) => {
 
         await user.save();
 
-        res.status(200).json({ message: "Profile updated", user });
+        res.status({OK}).json({ message: "Profile updated", user });
     } catch (error) {
         console.error("Something went wrong:", error.message);
-        res.status(500).json({ message: "Something went wrong" });
+        res.status(INTERNAL_SERVER_ERROR).json({ message: "Something went wrong" });
     }
 };

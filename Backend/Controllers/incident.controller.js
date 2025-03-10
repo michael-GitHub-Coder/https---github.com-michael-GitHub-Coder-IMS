@@ -72,7 +72,7 @@ export const updateTicket = async (req, res) => {
 
     try {
         // Ensure role and userId are available (assuming authentication middleware sets them)
-        console.log(req.role, req.userId);
+        //console.log(req.role, req.userId);
         if (!req.userId) {
             return res.status(401).json({ message: "Unauthorized" });
         }

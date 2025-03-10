@@ -1,0 +1,1 @@
+export const AFTER_24_HOURS = Date.now() + 24 * 60 * 60 * 1000;

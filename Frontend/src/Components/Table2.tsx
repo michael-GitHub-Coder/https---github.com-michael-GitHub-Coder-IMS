@@ -12,7 +12,7 @@ const Table2 = () => {
       refetch();
     }, 60000); // Refresh every 60 seconds
 
-    return () => clearInterval(interval); // Cleanup function
+    return () => clearInterval(interval); 
   }, [refetch]);
 
   const filteredTickets = tickets?.tickets
@@ -42,11 +42,7 @@ const Table2 = () => {
   };
 
   const handleEscalate = async (ticketId: string) => {
-    if (!selectedTicket) {
-      console.error("No ticket selected for escalation");
-      return; 
-    }
-  
+
     try {
       await updateTicket({
         ticketId,
@@ -108,13 +104,13 @@ const Table2 = () => {
                     <td className="py-2 px-4 flex gap-4">
                       <button
                         onClick={() => setSelectedTicket(ticket)}
-                        className="bg-indigo-500 text-white px-4 py-2 rounded cursor-pointer"
+                        className="bg-indigo-500 hover:bg-indigo-900 text-white px-4 py-2 rounded cursor-pointer"
                       >
                         View
                       </button>
                       <GrEscalator
                         size={30}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-indigo-500 hover:text-indigo-900"
                         onClick={() => {
                           setSelectedTicket2(ticket)
                           setIsEscalationModalOpen(true); 
@@ -148,7 +144,7 @@ const Table2 = () => {
               Next
             </button>
           </div>
-          {selectedTicket && console.log("selectedTicket ", selectedTicket)}
+
           {selectedTicket && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -172,7 +168,6 @@ const Table2 = () => {
             </div>
           )}
 
-          {isEscalationModalOpen && console.log("selectedTicket 2 ", selectedTicket2)}
           {isEscalationModalOpen && (
             <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -184,6 +179,10 @@ const Table2 = () => {
                 <div className="mt-1 flex justify-between border border-gray-300 px-2 py-3 rounded-md">
                   <p><strong>Assigned to:</strong> {selectedTicket2?.assignedTo ? `${selectedTicket2.assignedTo?.firstName} ${selectedTicket2.assignedTo?.lastName}` : "Not assigned"}</p>
                   <p><strong>Status:</strong> {selectedTicket2?.status}</p>
+                </div>
+                <div className="mt-1 space-y-5 border border-gray-300 px-2 py-3 rounded-md">
+                  <p><strong>Title:</strong> {selectedTicket2.title}</p>
+                  <p><strong>Description:</strong> {selectedTicket2.description}</p>
                 </div>
                 <div className="mt-4">
                   <textarea
