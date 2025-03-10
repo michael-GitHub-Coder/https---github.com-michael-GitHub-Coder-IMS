@@ -9,7 +9,7 @@ import {
     FORBIDDEN,
     NOT_FOUND,
     CONFLICT,
-    INTERNAL_SERVER_ERROR} from "../statusCodes/statusCodes.js";
+    INTERNAL_SERVER_ERROR} from "../Constants/statusCodes.js";
 
 export const validateLogin = async (req,res,next) => {
     try {
