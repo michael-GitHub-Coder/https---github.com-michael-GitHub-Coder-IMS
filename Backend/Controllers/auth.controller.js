@@ -14,7 +14,7 @@ import {
     FORBIDDEN,
     NOT_FOUND,
     CONFLICT,
-    INTERNAL_SERVER_ERROR} from "../statusCodes/statusCodes.js";
+    INTERNAL_SERVER_ERROR} from "../Constants/statusCodes.js";
 import { AFTER_24_HOURS } from "../Utils/timeStamps.js";
 
 export const signup = async (req,res) =>{
