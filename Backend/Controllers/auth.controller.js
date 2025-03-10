@@ -68,9 +68,9 @@ export const login = async (req, res) => {
 		if (!isPasswordValid) {
 			return res.status(BAD_REQUEST).json({ success: false, message: "Invalid credentials" });
 		}
-	    // if(!user.isVerified){
-		// 	return res.status(400).json({success:false, message:"Email not verified"});
-		// }
+	    if(!user.isVerified){
+			return res.status(400).json({success:false, message:"Email not verified"});
+		}
 
 		generateTokenAndsetCookie(res, user._id);
 
