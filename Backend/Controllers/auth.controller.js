@@ -62,7 +62,7 @@ import { AddUser } from "../Services/user.Service.js";
 
 export const signup = async (req, res, next) => {
     try {
-        const user = await AddUser(req, res); 
+        const user = await AddUser(req); 
         generateTokenAndsetCookie(res, user._id);
         return res.status(CREATED).json({
             success: true,
@@ -71,6 +71,7 @@ export const signup = async (req, res, next) => {
         });
     } catch (error) {
         next(new HttpError(error.message, BAD_REQUEST)); 
+        
     }
 };
 
@@ -87,9 +88,9 @@ export const login = async (req, res) => {
 		if (!isPasswordValid) {
 			return res.status(BAD_REQUEST).json({ success: false, message: "Invalid credentials" });
 		}
-	    if(!user.isVerified){
-			return res.status(400).json({success:false, message:"Email not verified"});
-		}
+	    // if(!user.isVerified){
+		// 	return res.status(400).json({success:false, message:"Email not verified"});
+		// }
 
 		generateTokenAndsetCookie(res, user._id);
 
@@ -106,10 +107,6 @@ export const login = async (req, res) => {
            
 		});
 	} catch (error) {
-      
-		// console.log("Error in login ", error);
-		// res.status(BAD_REQUEST).json({ success: false, message: error.message });
-        
         throw new HttpError(error.message,BAD_REQUEST);
 	}
 };
@@ -288,9 +285,9 @@ export const updateRole = async (req,res) =>{
 
 export const getAllUsers = async (req,res) =>{
     try {
-        if(req.role !== "Admin"){
-            return res.status(403).json({message:"Permission Denied"});
-        }
+        // if(req.role !== "Admin"){
+        //     return res.status(403).json({message:"Permission Denied"});
+        // }
         const users = await User.find({}).select("-password");
         res.status(OK).json({success:true,users});
     } catch (error) {

@@ -12,10 +12,10 @@ import {
     NOT_FOUND,
     CONFLICT,
     INTERNAL_SERVER_ERROR} from "../Constants/statusCodes.js";
-import bcryptjs from "bcryptjs";
 
 
-export const AddUser = async (req, res) => {
+
+export const AddUser = async (req) => {
     try {
         const { firstName, lastName, email, role, phoneNumber, bio, country, postalCode, city, password } = req.body; 
         
@@ -24,7 +24,6 @@ export const AddUser = async (req, res) => {
             return res.status(CONFLICT).json({ message: "User already exists" });
         }
 
-        const hashedPassword = await bcryptjs.hash(password, 10);
         const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
         const newUser = new User({
@@ -37,7 +36,7 @@ export const AddUser = async (req, res) => {
             country,
             postalCode,
             city,
-            password: hashedPassword, 
+            password, 
             verificationToken,
             verificationTokenExpiresAt: Date.now() + AFTER_24_HOURS, 
         });

@@ -30,3 +30,13 @@ export const validateSignUp = async (req,res,next) => {
         return res.status(BAD_REQUEST).json({success:false,message:error.errors});
     }
 }
+
+export const validateincident = async (req,res,next) => {
+    try {
+        const validatedData = incidentSchema.parse(req.body);
+        req.body = validatedData;
+        next();
+    } catch (error) {
+        return res.status(BAD_REQUEST).json({success:false,message:error.errors});   
+    }
+}
