@@ -1,4 +1,4 @@
-import {loginSchema, signUpSchema} from "../Zschemas/userSchema.js";
+import {AddmemberSchema, loginSchema, signUpSchema} from "../Zschemas/userSchema.js";
 import {
     OK,
     CREATED,
@@ -10,6 +10,7 @@ import {
     NOT_FOUND,
     CONFLICT,
     INTERNAL_SERVER_ERROR} from "../Constants/statusCodes.js";
+import HttpError from "../Utils/httpError.js";
 
 export const validateLogin = async (req,res,next) => {
     try {
@@ -17,7 +18,8 @@ export const validateLogin = async (req,res,next) => {
         req.body = validatedData;
         next();
     } catch (error) {
-        return res.status(BAD_REQUEST).json({success:false,message:error.errors});
+        console.log(error.message);
+        next( new HttpError(BAD_REQUEST,error.message));
     }
  }
 
@@ -27,16 +29,19 @@ export const validateSignUp = async (req,res,next) => {
         req.body = validatedData;
         next();
     } catch (error) {
-        return res.status(BAD_REQUEST).json({success:false,message:error.errors});
+        console.log(error.message);
+        next(new HttpError(BAD_REQUEST,error.message));
     }
 }
 
-export const validateincident = async (req,res,next) => {
+export const validateAddmember = async (req,res,next) => {
+    console.log(req.body);
     try {
-        const validatedData = incidentSchema.parse(req.body);
+        const validatedData = AddmemberSchema.parse(req.body);
         req.body = validatedData;
         next();
     } catch (error) {
-        return res.status(BAD_REQUEST).json({success:false,message:error.errors});   
+        console.log(error.message);
+        next(new HttpError(BAD_REQUEST,error.message));
     }
 }

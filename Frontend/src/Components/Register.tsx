@@ -30,7 +30,7 @@ const Register = () => {
     e.preventDefault();
     
     try {
-      const res = await register({firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city}).unwrap();
+      const res = await register({firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,confirmPassword,city}).unwrap();
       dispatch(setCredentials({...res}));
       navigate("/");
       setFirstName("");
