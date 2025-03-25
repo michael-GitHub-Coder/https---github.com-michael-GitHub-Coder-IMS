@@ -1,0 +1,10 @@
+# Ignore environment files
+.env
+.env.local
+.env.development
+.env.production
+
+
+# Ignore dependencies
+node_modules/
+node_modules/*

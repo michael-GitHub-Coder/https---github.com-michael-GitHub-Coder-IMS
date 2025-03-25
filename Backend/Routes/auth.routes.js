@@ -7,6 +7,7 @@ import {addGroup, getAllGroups,addToGroup, getGroups} from "../Controllers/group
 import { validateAddmember, validateLogin, validateSignUp } from "../middleware/validateUser.js";
 import { validateincident } from "../middleware/validateIncident.js";
 import { validateGroup } from "../middleware/validateGroup.js";
+import { validateRegion } from "../middleware/validateRegion.js";
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ router.get("/Count-status",verifyToken,getIncidentByStatus);
 router.get("/getTs",verifyToken,getAllTickets);
 //Regions
 
-router.post("/Add-Region",verifyToken,addRegion);
+router.post("/Add-Region",validateRegion, verifyToken,addRegion);
 router.get("/All-Regions",verifyToken,getAllRegions);
 
 //Groups
