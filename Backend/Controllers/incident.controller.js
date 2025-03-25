@@ -1,31 +1,11 @@
 import { Incident } from "../Models/Incident.Model.js";
 import { User } from "../Models/User.model.js";
+import { AddIncident } from "../Services/incident.service.js";
 
 export const addTicket = async (req, res) =>{
    
-    const {title,description,priority,status,region,group} = req.body;
-    if(!title || !description || !priority || !status){
-        return res.status(400).json({message:"All fields are required"});
-    }
-
-    try {
-
-        const user = await User.findById(req.userId);
-
-        if(user.role === "Technician" || user.role === "Supervisor"){
-            return res.status(403).json({message:"Permission Denied"});
-        }
-
-        const ticket = new Incident({
-            title,
-            description,
-            priority,
-            status,
-            createdBy:req.userId,
-            region,
-            group
-        });
-        await ticket.save();
+  try{
+        const ticket = await AddIncident(req);
         res.status(201).json({message:"Ticket created successfully ",ticket});
 
     } catch (error) {

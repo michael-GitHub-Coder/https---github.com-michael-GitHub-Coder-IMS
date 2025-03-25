@@ -4,7 +4,9 @@ import { verifyToken } from "../middleware/veifyToken.js";
 import { addTicket,updateTicket,updateTicketstatus,getAllTickets ,getIncidentByStatus} from "../Controllers/incident.controller.js";
 import {addRegion,getAllRegions} from "../Controllers/region.controller.js";
 import {addGroup, getAllGroups,addToGroup, getGroups} from "../Controllers/group.controller.js";
-import { validateLogin, validateSignUp } from "../middleware/validateUser.js";
+import { validateAddmember, validateLogin, validateSignUp } from "../middleware/validateUser.js";
+import { validateincident } from "../middleware/validateIncident.js";
+import { validateGroup } from "../middleware/validateGroup.js";
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ const router = express.Router();
 
 router.get("/check-auth", verifyToken,checkAuth);
 router.post("/sign-up", validateSignUp,signup);
-router.post("/member",verifyToken, addMembers);
+router.post("/member",validateAddmember,verifyToken, addMembers);
 router.post("/login",validateLogin,login);
 router.post("/logout",logout);
 router.post("/verify-email", verifyEmail);
@@ -26,7 +28,7 @@ router.put("/Update-profile/:_id",verifyToken,updateUser);
 
 //tickets 
 
-router.post("/Add-Ticket",verifyToken,addTicket);
+router.post("/Add-Ticket",validateincident,verifyToken,addTicket);
 router.get("/Ticket",verifyToken,addTicket); 
 router.get("/Assign/:incidentID",verifyToken,updateTicket); 
 router.put("/updateStatus/:id",verifyToken,updateTicketstatus); 
@@ -44,7 +46,7 @@ router.get("/All-Regions",verifyToken,getAllRegions);
 
 //Groups
 
-router.post("/Add-Group",verifyToken,addGroup);
+router.post("/Add-Group",validateGroup,verifyToken,addGroup);
 router.get("/All-Groups",verifyToken,getAllGroups);
 router.put("/Add-to-group/:id",verifyToken,addToGroup);
 router.get("/getGroups",verifyToken,getGroups);

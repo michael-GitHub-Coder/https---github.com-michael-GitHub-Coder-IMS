@@ -17,7 +17,7 @@ import {
     INTERNAL_SERVER_ERROR} from "../Constants/statusCodes.js";
 import { AFTER_24_HOURS } from "../Utils/timeStamps.js";
 import HttpError from "../Utils/httpError.js";
-import { AddUser } from "../Services/user.Service.js";
+import { AddUser, checkUser, forgotMyPassword, resetMypassword, updatedUser } from "../Services/user.Service.js";
 
 // export const signup = async (req,res,next) =>{
 
@@ -62,7 +62,7 @@ import { AddUser } from "../Services/user.Service.js";
 
 export const signup = async (req, res, next) => {
     try {
-        const user = await AddUser(req, res); 
+        const user = await AddUser(req); 
         generateTokenAndsetCookie(res, user._id);
         return res.status(CREATED).json({
             success: true,
@@ -71,6 +71,7 @@ export const signup = async (req, res, next) => {
         });
     } catch (error) {
         next(new HttpError(error.message, BAD_REQUEST)); 
+        
     }
 };
 
@@ -87,10 +88,10 @@ export const login = async (req, res) => {
 		if (!isPasswordValid) {
 			return res.status(BAD_REQUEST).json({ success: false, message: "Invalid credentials" });
 		}
-	    if(!user.isVerified){
-			return res.status(400).json({success:false, message:"Email not verified"});
-		}
-
+	    // if(!user.isVerified){
+		// 	return res.status(400).json({success:false, message:"Email not verified"});
+		// }
+        
 		generateTokenAndsetCookie(res, user._id);
 
 		user.lastLogin = new Date();
@@ -106,10 +107,6 @@ export const login = async (req, res) => {
            
 		});
 	} catch (error) {
-      
-		// console.log("Error in login ", error);
-		// res.status(BAD_REQUEST).json({ success: false, message: error.message });
-        
         throw new HttpError(error.message,BAD_REQUEST);
 	}
 };
@@ -119,21 +116,7 @@ export const verifyEmail = async (req,res) =>{
     const {code} = req.body;
 
     try {
-        const user = await User.findOne({
-            verificationToken: code,
-            verificationTokenExpiresAt: {$gt: Date.now()}
-        });
-
-        if(!user){
-            return res.status({BAD_REQUEST}).json({success:false,message:"Invalid or expired verification code"});
-        }
-        user.isVerified = true;
-        user.verificationToken = undefined;
-        user.verificationTokenExpiresAt = undefined;
-
-        await user.save();
-
-        //await sendWelcomeEmail(user.email, user.name);
+        const user = await validateEmail(code);
         res.status(OK).json({
             success:true,
             message:"Email verified successfully",
@@ -142,7 +125,6 @@ export const verifyEmail = async (req,res) =>{
                 password: undefined,
             }
         }); 
-
     } catch (error) {
         // console.log("Verify email")
         // res.status(INTERNAL_SERVER_ERROR).json({success:false,message:"Server error"})
@@ -159,21 +141,21 @@ export const forgotPassword = async (req,res) =>{
 
     const {email} = req.body;
     try {
-        const user = await User.findOne({email});
+        // const user = await User.findOne({email});
 
-        if(!user){
-            return res.status(BAD_REQUEST).json({success:false,message:"User not found"})
-        }
+        // if(!user){
+        //     return res.status(BAD_REQUEST).json({success:false,message:"User not found"})
+        // }
 
-        const resetToken  = crypto.randomBytes(20).toString("hex");
-        const restTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000;
+        // const resetToken  = crypto.randomBytes(20).toString("hex");
+        // const restTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000;
 
-        user.resetPasswordToken = resetToken;
-        user.resetPasswordExpiresAt = restTokenExpiresAt;
+        // user.resetPasswordToken = resetToken;
+        // user.resetPasswordExpiresAt = restTokenExpiresAt;
 
-        await user.save();
-        //await sendPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
-
+        // await user.save();
+        // await sendPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+        await forgotMyPassword(email);
         res.status(OK).json({success:true,message:"Password reset link sent to your email"});
 
     } catch (error) {
@@ -188,24 +170,7 @@ export const resetPassord = async (req,res) => {
         const {token} = req.params;
         const {password} = req.body;
 
-        const user = await User.findOne({
-            resetPasswordToken: token,
-            resetPasswordExpiresAt: {$gt: Date.now()},
-        });
-
-        if(!user){
-            return res.status(BAD_REQUEST).json({success:false,message:"Invalid or expired rest token"});
-        }
-
-        const hashedPassword = await bcryptjs.hash(password,10);
-
-        user.password = hashedPassword;
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpiresAt=undefined;
-
-        await user.save();
-    
-       //sendResetSuccessEmail(user.email);
+        await resetMypassword(token,password);
         res.status(OK).json({success:true,message:"Password reset successfull"});
 
     } catch (error) {
@@ -217,58 +182,20 @@ export const resetPassord = async (req,res) => {
 export const checkAuth = async (req,res) =>{
 
     try {
-        const user = await User.findById(req.userId).select("-password")
-        .populate("group","name");
-        if(!user){
-            return res.status(NOT_FOUND).json({success:false,message:"User not found"});
-        }
-
+        
+        const user = await checkUser(req);
         res.status(OK).json({success:true, user});
 
     } catch (error) {
-        console.log("Error in checkAuth", error);
         res.status(BAD_REQUEST).json({success:false,message:error.message});
     }
 };
 
 export const addMembers = async (req,res) =>{
    
-
-    const {firstName,lastName,email,role,phoneNumber,bio,country,postalCode,password,city,group} = req.body;
-
-    if(!firstName || !lastName || !email || !role || !phoneNumber || !bio || !country || !postalCode || !password || !city || !group){
-        return res.status(NOT_FOUND).json({message:"All fields are required"});
-    }
-
     try {
 
-        const admin = await User.findById(req.userId).select("-password");
-
-        if(!admin){
-            return res.status(FORBIDDEN).json({message:"Permission Denied"});
-        } 
-        if(admin.role !== "Admin"){
-            return res.status(FORBIDDEN).json({message:"Permission Denied", reqRole:admin.role});
-        }
-
-        const user = await User.findOne({email});
-        if(user){
-            return res.status(CONFLICT).json({message:"User already exists"});
-        }
-
-        //const salt = await bcryptjs.genSalt(10);
-        const hashedPassword = await bcryptjs.hash(password,10);
-		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
-
-        const newUser = new User({
-			firstName,lastName,email,role,phoneNumber,bio,country,postalCode,city,group,
-			password:hashedPassword,
-			verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
-		});
-        await newUser.save();
-
-		
+		const newUser = await AddUser(req);
 		generateTokenAndsetCookie(res,newUser._id);
        // await sendverificationEmail(newUser.email, verificationToken);
 
@@ -287,49 +214,25 @@ export const updateRole = async (req,res) =>{
 }
 
 export const getAllUsers = async (req,res) =>{
+
+ 
     try {
-        if(req.role !== "Admin"){
-            return res.status(403).json({message:"Permission Denied"});
-        }
+        // if(req.role !== "Admin"){
+        //     throw new HttpError("Permission Denied",FORBIDDEN);
+        // }
         const users = await User.find({}).select("-password");
         res.status(OK).json({success:true,users});
     } catch (error) {
-        // console.log("Error in getAllUsers", error);
-        // res.status(INTERNAL_SERVER_ERROR).json({success:false,message:error.message});
         throw new HttpError(error.message,INTERNAL_SERVER_ERROR);
     }
 }
 
 export const updateUser = async (req, res) => {
-    const { firstName, lastName, email, role, phoneNumber, bio, country, postalCode, city } = req.body;
-    const { _id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-        return res.status(BAD_REQUEST).json({ message: "Invalid user ID", data:_id });
-      }
-
+    
     try {
-        const user = await User.findById(_id);
-        if (!user) {
-            return res.status(NOT_FOUND).json({ message: "User not found" });
-        }
-
-        user.firstName = firstName?.trim() || user.firstName;
-        user.lastName = lastName?.trim() || user.lastName;
-        user.email = email?.trim() || user.email;
-        user.role = role || user.role;
-        user.phoneNumber = phoneNumber?.trim() || user.phoneNumber;
-        user.bio = bio?.trim() || user.bio;
-        user.country = country?.trim() || user.country;
-        user.city = city?.trim() || user.city;
-        user.postalCode = postalCode?.trim() || user.postalCode;
-
-        await user.save();
-
+        const user = await updatedUser(req);
         res.status(OK).json({ message: "Profile updated", user });
     } catch (error) {
-        // console.error("Something went wrong:", error.message);
-        // res.status(INTERNAL_SERVER_ERROR).json({ message: "Something went wrong" });
         throw new HttpError(error.message,BAD_REQUEST);
     }
 };

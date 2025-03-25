@@ -1,80 +1,36 @@
 import {Group} from '../Models/group.model.js';
 import {User} from '../Models/User.model.js';
 import {Region} from '../Models/region.model.js';
+import { AddMyMember } from '../Services/user.Service.js';
+import HttpError from '../Utils/httpError.js';
+import { BAD_REQUEST, CREATED, OK } from '../Constants/statusCodes.js';
+import { addToMygroup, getMyGroups } from '../Services/group.service.js';
 
 
 export const addGroup = async (req, res) =>{
     
-    const {name,regionId,supervisorId} = req.body;
-    if(!regionId || !supervisorId){
-        return res.status(400).json({message:"All fields are required"});
-    }
-    if(!name){
-        return res.status(400).json({message:"All fields are required"});
-    }
-
     try {
-        const group = new Group({
-            name,
-            regionId,
-            supervisorId,
-            createdBy:req.userId,
-        });
-        await group.save();
-        res.status(201).json({message:"Group created successfully ",group});
-
+        const group = await AddMyMember(req);
+        res.status(CREATED).json({message:"Group created successfully ",group});
     } catch (error) {
-        console.log("addGroup error", error);
-        res.status(500).json({message:error.message})
+        throw new HttpError(error.message, BAD_REQUEST)
     }
 }
 
 export const getAllGroups = async (req,res) =>{
     try {
         const groups = await Group.find();
-        res.status(200).json({groups});
+        res.status(OK).json({groups});
     } catch (error) {
-        console.log("getAllGroups error", error);
-        res.status(500).json({message:error.message});
+        throw new HttpError(error.message,BAD_REQUEST)
     }
 }
 
 export const addToGroup = async (req, res) =>{
     
-    const {regionId, supervisorId} = req.body;
-    const {id} = req.params;
-
-    
+  
     try {
-        
-        const user = await User.findById(req.userId).select("-password");
-        if(!user){
-            return res.status(404).json({message:"User not found"});
-        }
-        if(user.role !== "Admin"){
-            return res.status(401).json({message:"You are not authorized to perform this action"});
-        }
-
-        const group = await Group.findById(id);
-        if(!group){
-            return res.status(404).json({message:"Group not found"});
-        }
-      
-        const region = await Region.findById(regionId);
-        if(!region){
-            return res.status(404).json({message:"Region not found"});
-        }
-
-        const supervisor = await User.findById(supervisorId);
-        if(!supervisor){
-            return res.status(404).json({message:"Supervisor not found"});
-        }
-
-        group.name = req.body.name;
-        group.regionId = regionId;
-        group.supervisorId = supervisorId;
-
-        await group.save();
+        const group = await addToMygroup(req);
         res.status(201).json({message:"Supervisor added to group:",groupName:group.name,group});
 
     } catch (error) {
@@ -89,14 +45,10 @@ export const addToGroup = async (req, res) =>{
 export const getGroups = async (req,res) =>{
 
     try {
-        const group = await Group.find().populate("createdBy","firstName lastName email")
-        .populate("supervisorId","firstName lastName email")
-        .populate("regionId","name");
-
+        const group = await getMyGroups();
         res.status(200).json({group});
 
     } catch (error) {
-        console.log("getAGroups error",error);
-        res.status(500).json({message:error.message});
+        throw new HttpError(error.message,BAD_REQUEST);
     }
 }
